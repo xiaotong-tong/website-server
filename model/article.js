@@ -18,22 +18,36 @@ const Article = sequelize.define("articles", {
 		comment: "Article UUID"
 	},
 	title: {
-		type: DataTypes.STRING(255)
+		type: DataTypes.STRING(255),
+		comment: "文章标题"
 	},
 	content: {
-		type: DataTypes.TEXT
+		type: DataTypes.TEXT,
+		comment: "文章内容"
+	},
+	abstract: {
+		type: DataTypes.TEXT,
+		comment: "文章摘要"
 	},
 	author: {
-		type: DataTypes.STRING(255)
+		type: DataTypes.STRING(255),
+		comment: "文章作者"
 	},
 	category: {
-		type: DataTypes.STRING(255)
+		type: DataTypes.STRING(255),
+		comment: "文章分类"
 	},
 	tags: {
-		type: DataTypes.STRING(255)
+		type: DataTypes.STRING(255),
+		comment: "文章标签"
 	},
 	createDate: {
-		type: DataTypes.DATEONLY
+		type: DataTypes.DATEONLY,
+		comment: "文章创建日期"
+	},
+	thumbnail: {
+		type: DataTypes.STRING(255),
+		comment: "文章缩略图"
 	}
 });
 
