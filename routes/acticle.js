@@ -5,21 +5,29 @@ const { formatDate } = require("xtt-utils");
 const Article = require("../model/article.js");
 
 router.post("/add", (req, res) => {
-	try {
-		Article.create({
-			title: req.body.title,
-			content: req.body.content,
-			author: req.body.author,
-			category: req.body.category,
-			tags: req.body.tags,
-			createDate: formatDate(new Date(), "yyyy-MM-DD")
-		});
+	if (req.passed) {
+		try {
+			Article.create({
+				title: req.body.title,
+				content: req.body.content,
+				author: req.body.author,
+				category: req.body.category,
+				abstract: req.body.abstract,
+				thumbnail: req.body.thumbnail,
+				createDate: formatDate(new Date(), "yyyy-MM-DD")
+			});
 
-		res.send("success");
-	} catch (error) {
-		res.status(500).send({
+			res.send("success");
+		} catch (error) {
+			res.status(500).send({
+				value: "error",
+				message: error
+			});
+		}
+	} else {
+		res.status(401).send({
 			value: "error",
-			message: error
+			message: "Unauthorized"
 		});
 	}
 });
@@ -71,6 +79,64 @@ router.get("/:id", async (req, res) => {
 		res.status(500).send({
 			value: "error",
 			message: error
+		});
+	}
+});
+
+router.put("/edit/:id", async (req, res) => {
+	if (req.passed) {
+		try {
+			await Article.update(
+				{
+					title: req.body.title,
+					content: req.body.content,
+					author: req.body.author,
+					category: req.body.category,
+					abstract: req.body.abstract,
+					thumbnail: req.body.thumbnail
+				},
+				{
+					where: {
+						id: req.params.id
+					}
+				}
+			);
+
+			res.send("success");
+		} catch (error) {
+			res.status(500).send({
+				value: "error",
+				message: error
+			});
+		}
+	} else {
+		res.status(401).send({
+			value: "error",
+			message: "Unauthorized"
+		});
+	}
+});
+
+router.delete("/delete/:id", async (req, res) => {
+	if (req.passed) {
+		try {
+			await Article.destroy({
+				where: {
+					id: req.params.id
+				}
+			});
+
+			res.send("success");
+		} catch (error) {
+			res.status(500).send({
+				value: "error",
+				message: error
+			});
+		}
+	} else {
+		res.status(401).send({
+			value: "error",
+			message: "Unauthorized"
 		});
 	}
 });
