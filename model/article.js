@@ -34,7 +34,8 @@ const Article = sequelize.define("articles", {
 		comment: "文章作者"
 	},
 	category: {
-		type: DataTypes.STRING(255),
+		type: DataTypes.ENUM,
+		values: ["网络互联", "日语学习", "喵随笔", "test", "其它"],
 		comment: "文章分类"
 	},
 	tags: {

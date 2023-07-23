@@ -34,6 +34,8 @@ router.post("/add", (req, res) => {
 
 router.get("/list", async (req, res) => {
 	try {
+		const filters = req.query?.filters;
+
 		const articles = await Article.findAll({
 			attributes: [
 				"id",
@@ -47,7 +49,12 @@ router.get("/list", async (req, res) => {
 				"thumbnail",
 				"abstract"
 			],
-			order: [["id", "DESC"]]
+			order: [["id", "DESC"]],
+			where: filters?.category
+				? {
+						category: filters.category
+				  }
+				: null
 		});
 
 		res.send({
@@ -92,6 +99,7 @@ router.put("/edit/:id", async (req, res) => {
 					content: req.body.content,
 					author: req.body.author,
 					category: req.body.category,
+					tags: req.body.tags,
 					abstract: req.body.abstract,
 					thumbnail: req.body.thumbnail
 				},
