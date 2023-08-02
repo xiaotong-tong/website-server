@@ -12,6 +12,7 @@ router.post("/add", (req, res) => {
 				content: req.body.content,
 				author: req.body.author,
 				category: req.body.category,
+				tags: req.body.tags,
 				abstract: req.body.abstract,
 				thumbnail: req.body.thumbnail,
 				createDate: formatDate(new Date(), "yyyy-MM-DD")
@@ -57,15 +58,9 @@ router.get("/list", async (req, res) => {
 				: null
 		});
 
-		res.send({
-			value: "success",
-			data: articles
-		});
+		res.send(articles);
 	} catch (error) {
-		res.status(500).send({
-			value: "error",
-			message: error
-		});
+		res.status(500).send(error);
 	}
 });
 
@@ -93,22 +88,35 @@ router.get("/:id", async (req, res) => {
 router.put("/edit/:id", async (req, res) => {
 	if (req.passed) {
 		try {
-			await Article.update(
-				{
-					title: req.body.title,
-					content: req.body.content,
-					author: req.body.author,
-					category: req.body.category,
-					tags: req.body.tags,
-					abstract: req.body.abstract,
-					thumbnail: req.body.thumbnail
-				},
-				{
-					where: {
-						id: req.params.id
-					}
+			const updateOption = {};
+
+			if (req.body.title) {
+				updateOption.title = req.body.title;
+			}
+			if (req.body.content) {
+				updateOption.content = req.body.content;
+			}
+			if (req.body.author) {
+				updateOption.author = req.body.author;
+			}
+			if (req.body.category) {
+				updateOption.category = req.body.category;
+			}
+			if (req.body.tags) {
+				updateOption.tags = req.body.tags;
+			}
+			if (req.body.abstract) {
+				updateOption.abstract = req.body.abstract;
+			}
+			if (req.body.thumbnail) {
+				updateOption.thumbnail = req.body.thumbnail;
+			}
+
+			await Article.update(updateOption, {
+				where: {
+					id: req.params.id
 				}
-			);
+			});
 
 			res.send("success");
 		} catch (error) {

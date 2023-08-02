@@ -36,15 +36,9 @@ router.get("/list", async (req, res) => {
 			order: [["id", "DESC"]]
 		});
 
-		res.send({
-			value: "success",
-			data: words
-		});
+		res.send(words);
 	} catch (error) {
-		res.status(500).send({
-			value: "error",
-			message: error
-		});
+		res.status(500).send(error);
 	}
 });
 
