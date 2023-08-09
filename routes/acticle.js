@@ -4,10 +4,10 @@ const { formatDate } = require("xtt-utils");
 
 const Article = require("../model/article.js");
 
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
 	if (req.passed) {
 		try {
-			Article.create({
+			await Article.create({
 				title: req.body.title,
 				content: req.body.content,
 				author: req.body.author,

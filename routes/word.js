@@ -3,10 +3,10 @@ const router = express.Router();
 
 const Words = require("../model/word.js");
 
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
 	if (req.passed) {
 		try {
-			Words.create({
+			await Words.create({
 				word: req.body.word,
 				kana: req.body.kana,
 				accent: req.body.accent,
