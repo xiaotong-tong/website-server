@@ -52,7 +52,7 @@ router.get("/list", async (req, res) => {
 			return false;
 		}
 
-		const comments = await Comments.findAll({
+		let comments = await Comments.findAll({
 			attributes: [
 				"id",
 				"uid",
@@ -70,6 +70,29 @@ router.get("/list", async (req, res) => {
 				articleId: articleId
 			}
 		});
+
+		const children = new Map();
+
+		comments = comments
+			.filter((comment) => {
+				if (comment.parent) {
+					const parent = comment.parent;
+
+					if (children.has(parent)) {
+						children.get(parent).push(comment);
+					} else {
+						children.set(parent, [comment]);
+					}
+
+					return false;
+				} else {
+					return true;
+				}
+			})
+			.map((comment) => {
+				comment.dataValues.children = children.get(comment.id) || null;
+				return comment;
+			});
 
 		res.send(comments);
 	} catch (error) {
