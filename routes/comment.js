@@ -3,6 +3,7 @@ const router = express.Router();
 const { formatDate } = require("xtt-utils");
 
 const Comments = require("../model/comment.js");
+const commentPhotos = require("../model/commentPhoto.js");
 
 router.post("/add", async (req, res) => {
 	try {
@@ -25,6 +26,7 @@ router.post("/add", async (req, res) => {
 
 		await Comments.create({
 			articleId: articleId,
+			photoUrl: req.body.photoUrl,
 			nickname: req.body.nickname,
 			email: req.body.email,
 			content: content,
@@ -57,6 +59,7 @@ router.get("/list", async (req, res) => {
 				"id",
 				"uid",
 				"articleId",
+				"photoUrl",
 				"nickname",
 				"email",
 				"content",
@@ -124,4 +127,37 @@ router.delete("/delete/:id", async (req, res) => {
 	}
 });
 
+router.post("/upload/photo", async (req, res) => {
+	try {
+		const { url } = req.body;
+
+		if (!url) {
+			res.status(400).send({
+				value: "error",
+				message: "url is required"
+			});
+			return false;
+		}
+
+		await commentPhotos.create({
+			url: url
+		});
+
+		res.send("success");
+	} catch (error) {
+		res.status(500).send(error);
+	}
+});
+
+router.get("/photo/list", async (req, res) => {
+	try {
+		const photos = await commentPhotos.findAll({
+			attributes: ["id", "url"],
+			order: [["id", "ASC"]]
+		});
+		res.send(photos);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+});
 module.exports = router;
