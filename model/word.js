@@ -22,6 +22,10 @@ const Words = sequelize.define("words", {
 		type: DataTypes.TINYINT.UNSIGNED,
 		comment: "重音"
 	},
+	english: {
+		type: DataTypes.STRING(255),
+		comment: "英語"
+	},
 	mean: {
 		type: DataTypes.STRING(255),
 		comment: "意味"
