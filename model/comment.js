@@ -19,6 +19,10 @@ const Comments = sequelize.define("comments", {
 		type: DataTypes.BIGINT.UNSIGNED,
 		comment: "评论的文章ID"
 	},
+	isGuestbook: {
+		type: DataTypes.BOOLEAN,
+		comment: "是否是留言"
+	},
 	photoUrl: {
 		type: DataTypes.STRING(255),
 		comment: "评论者头像链接"

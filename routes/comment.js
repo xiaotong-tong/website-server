@@ -7,25 +7,20 @@ const commentPhotos = require("../model/commentPhoto.js");
 
 router.post("/add", async (req, res) => {
 	try {
-		const { articleId, content } = req.body;
+		const { articleId, content, isGuestbook } = req.body;
 
-		if (!articleId) {
-			res.status(400).send({
-				value: "error",
-				message: "articleId is required"
-			});
+		if (!articleId && !isGuestbook) {
+			res.status(400).send(`${isGuestbook ? "isGuestbook" : "articleId"} is required`);
 			return false;
 		}
 		if (!content) {
-			res.status(400).send({
-				value: "error",
-				message: "comment content is required"
-			});
+			res.status(400).send("comment content is required");
 			return false;
 		}
 
 		await Comments.create({
 			articleId: articleId,
+			isGuestbook: isGuestbook,
 			photoUrl: req.body.photoUrl,
 			nickname: req.body.nickname,
 			email: req.body.email,
@@ -44,21 +39,21 @@ router.post("/add", async (req, res) => {
 
 router.get("/list", async (req, res) => {
 	try {
-		const articleId = req.query?.articleId;
+		let { articleId, isGuestbook } = req.query;
 
-		if (!articleId) {
-			res.status(400).send({
-				value: "error",
-				message: "articleId is required"
-			});
+		if (!articleId && !isGuestbook) {
+			res.status(400).send(`${isGuestbook ? "isGuestbook" : "articleId"} is required`);
 			return false;
 		}
+
+		isGuestbook = isGuestbook === "true";
 
 		let comments = await Comments.findAll({
 			attributes: [
 				"id",
 				"uid",
 				"articleId",
+				"isGuestbook",
 				"photoUrl",
 				"nickname",
 				"email",
@@ -69,9 +64,13 @@ router.get("/list", async (req, res) => {
 				"replyId"
 			],
 			order: [["id", "ASC"]],
-			where: {
-				articleId: articleId
-			}
+			where: isGuestbook
+				? {
+						isGuestbook: isGuestbook
+				  }
+				: {
+						articleId: articleId
+				  }
 		});
 
 		const children = new Map();
@@ -114,16 +113,10 @@ router.delete("/delete/:id", async (req, res) => {
 
 			res.send("success");
 		} catch (error) {
-			res.status(500).send({
-				value: "error",
-				message: error
-			});
+			res.status(500).send(error);
 		}
 	} else {
-		res.status(401).send({
-			value: "error",
-			message: "Unauthorized"
-		});
+		res.status(401).send("Unauthorized");
 	}
 });
 
@@ -132,10 +125,7 @@ router.post("/upload/photo", async (req, res) => {
 		const { url } = req.body;
 
 		if (!url) {
-			res.status(400).send({
-				value: "error",
-				message: "url is required"
-			});
+			res.status(400).send("url is required");
 			return false;
 		}
 
