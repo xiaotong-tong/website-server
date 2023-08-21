@@ -1,4 +1,5 @@
 const express = require("express");
+const { Op } = require("sequelize");
 const router = express.Router();
 const { formatDate } = require("xtt-utils");
 
@@ -73,15 +74,34 @@ router.get("/:id", async (req, res) => {
 			attributes: ["id", "uid", "title", "content", "author", "category", "tags", "createDate", "thumbnail", "abstract"]
 		});
 
-		res.send({
-			value: "success",
-			data: article
+		// 获取上一篇文章的信息
+		const prevArticle = await Article.findOne({
+			where: {
+				id: {
+					[Op.lt]: req.params.id
+				}
+			},
+			order: [["id", "DESC"]],
+			attributes: ["id", "uid", "title"]
 		});
+
+		// 获取下一篇文章的信息
+		const nextArticle = await Article.findOne({
+			where: {
+				id: {
+					[Op.gt]: req.params.id
+				}
+			},
+			order: [["id", "ASC"]],
+			attributes: ["id", "uid", "title"]
+		});
+
+		article.dataValues.prev = prevArticle;
+		article.dataValues.next = nextArticle;
+
+		res.send(article);
 	} catch (error) {
-		res.status(500).send({
-			value: "error",
-			message: error
-		});
+		res.status(500).send(error);
 	}
 });
 
@@ -120,16 +140,10 @@ router.put("/edit/:id", async (req, res) => {
 
 			res.send("success");
 		} catch (error) {
-			res.status(500).send({
-				value: "error",
-				message: error
-			});
+			res.status(500).send(error);
 		}
 	} else {
-		res.status(401).send({
-			value: "error",
-			message: "Unauthorized"
-		});
+		res.status(401).send("Unauthorized");
 	}
 });
 
@@ -144,16 +158,10 @@ router.delete("/delete/:id", async (req, res) => {
 
 			res.send("success");
 		} catch (error) {
-			res.status(500).send({
-				value: "error",
-				message: error
-			});
+			res.status(500).send(error);
 		}
 	} else {
-		res.status(401).send({
-			value: "error",
-			message: "Unauthorized"
-		});
+		res.status(401).send("Unauthorized");
 	}
 });
 
