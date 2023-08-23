@@ -17,21 +17,12 @@ router.get("/:uid", async (req, res) => {
 		});
 
 		if (req.params.uid === verify.password) {
-			res.send({
-				value: "success",
-				message: "验证成功"
-			});
+			res.send("验证成功");
 		} else {
-			res.send({
-				value: "error",
-				message: "验证失败, 口令错误。"
-			});
+			res.send("验证失败, 口令错误。");
 		}
 	} catch (error) {
-		res.status(500).send({
-			value: "error",
-			message: error
-		});
+		res.status(500).send(error);
 	}
 });
 

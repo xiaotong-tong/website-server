@@ -3,6 +3,7 @@ const verify = require("./verify.js");
 const authenticate = require("./authorization.js");
 const word = require("./word.js");
 const Comments = require("./comment.js");
+const Chat = require("./chat.js");
 
 const routes = (app) => {
 	app.use(authenticate);
@@ -10,6 +11,7 @@ const routes = (app) => {
 	app.use("/verify", verify);
 	app.use("/word", word);
 	app.use("/comment", Comments);
+	app.use("/chat", Chat);
 
 	app.get("/hello", (req, res) => {
 		res.send("Hello World!");
