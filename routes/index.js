@@ -5,8 +5,13 @@ const word = require("./word.js");
 const Comments = require("./comment.js");
 const Chat = require("./chat.js");
 
+const chatLimiter = require("./limit.js");
+
 const routes = (app) => {
+	app.use("/chat/bot", chatLimiter);
+
 	app.use(authenticate);
+
 	app.use("/acticle", acticle);
 	app.use("/verify", verify);
 	app.use("/word", word);
