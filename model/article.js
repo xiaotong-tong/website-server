@@ -35,7 +35,7 @@ const Article = sequelize.define("articles", {
 	},
 	category: {
 		type: DataTypes.ENUM,
-		values: ["网络互联", "日语学习", "喵随笔", "test", "其它"],
+		values: ["网络互联", "语言学习", "喵随笔", "test", "其它"],
 		comment: "文章分类"
 	},
 	tags: {
