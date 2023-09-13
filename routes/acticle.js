@@ -3,14 +3,22 @@ const { Op } = require("sequelize");
 const router = express.Router();
 const { formatDate } = require("xtt-utils");
 
+// xss 过滤
+// 文章好像不需要过滤，目前文章方面由我自己控制，写入等也需要有写入权限。
+const xss = require("xss");
+
 const Article = require("../model/article.js");
 
 router.post("/add", async (req, res) => {
 	if (req.passed) {
 		try {
+			let { content } = req.body;
+
+			content = xss(content);
+
 			await Article.create({
 				title: req.body.title,
-				content: req.body.content,
+				content: content,
 				author: req.body.author,
 				category: req.body.category,
 				tags: req.body.tags,
@@ -114,7 +122,7 @@ router.put("/edit/:id", async (req, res) => {
 				updateOption.title = req.body.title;
 			}
 			if (req.body.content) {
-				updateOption.content = req.body.content;
+				updateOption.content = xss(req.body.content);
 			}
 			if (req.body.author) {
 				updateOption.author = req.body.author;

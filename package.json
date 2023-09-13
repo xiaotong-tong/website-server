@@ -27,6 +27,7 @@
 		"express-rate-limit": "^6.9.0",
 		"mysql2": "^3.5.1",
 		"sequelize": "^6.32.1",
+		"xss": "^1.0.14",
 		"xtt-utils": "^0.1.2"
 	}
 }

@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { formatDate } = require("xtt-utils");
 
+// 对评论信息进行 xss 文本过滤，防止 xss 注入
+const xss = require("xss");
+
 const Comments = require("../model/comment.js");
 const commentPhotos = require("../model/commentPhoto.js");
 
@@ -24,7 +27,7 @@ router.post("/add", async (req, res) => {
 			photoUrl: req.body.photoUrl,
 			nickname: req.body.nickname,
 			email: req.body.email,
-			content: content,
+			content: xss(content),
 			createDate: formatDate(new Date(), "yyyy-MM-DD"),
 			parent: Number(req.body.parent) || null,
 			replyId: Number(req.body.replyId) || null,
