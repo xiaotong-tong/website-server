@@ -21,6 +21,8 @@ const routes = (app) => {
 	app.get("/hello", (req, res) => {
 		res.send("Hello World!");
 	});
+
+	require("./widget.js")(app);
 };
 
 module.exports = routes;

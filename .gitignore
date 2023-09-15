@@ -4,3 +4,6 @@ package-lock.json
 
 # 隐私文件
 .env
+
+# 临时文件
+uploads/
