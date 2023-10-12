@@ -82,6 +82,12 @@ router.get("/:id", async (req, res) => {
 			attributes: ["id", "uid", "title", "content", "author", "category", "tags", "createDate", "thumbnail", "abstract"]
 		});
 
+		// 如果 article 不存在，这代表文章不存在，返回 404
+		if (!article) {
+			res.status(404).send("Not Found Article ID");
+			return;
+		}
+
 		// 获取上一篇文章的信息
 		const prevArticle = await Article.findOne({
 			where: {
