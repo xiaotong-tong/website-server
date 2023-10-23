@@ -8,6 +8,8 @@ const xss = require("xss");
 const Comments = require("../model/comment.js");
 const commentPhotos = require("../model/commentPhoto.js");
 
+const { getArticleTitle } = require("./utils/acticleTitle.js");
+
 router.post("/add", async (req, res) => {
 	try {
 		const { articleId, content, isGuestbook } = req.body;
@@ -98,6 +100,33 @@ router.get("/list", async (req, res) => {
 				comment.dataValues.children = children.get(comment.id) || null;
 				return comment;
 			});
+
+		res.send(comments);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+});
+
+// 获取最新评论
+router.get("/list/recent", async (req, res) => {
+	try {
+		const { limit } = req.query;
+
+		let comments = await Comments.findAll({
+			attributes: ["id", "uid", "articleId", "isGuestbook", "photoUrl", "nickname", "content", "createDate"],
+			order: [["id", "DESC"]],
+			limit: limit ? Number(limit) : undefined
+		});
+
+		const articleTitle = await getArticleTitle();
+
+		comments = comments.map((comment) => {
+			if (comment.articleId) {
+				comment.dataValues.articleTitle = articleTitle.get(comment.articleId);
+			}
+
+			return comment;
+		});
 
 		res.send(comments);
 	} catch (error) {
