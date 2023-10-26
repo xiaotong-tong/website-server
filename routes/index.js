@@ -4,6 +4,7 @@ const authenticate = require("./authorization.js");
 const word = require("./word.js");
 const Comments = require("./comment.js");
 const Chat = require("./chat.js");
+const Kana = require("./kana.js");
 
 const chatLimiter = require("./limit.js");
 
@@ -17,6 +18,7 @@ const routes = (app) => {
 	app.use("/word", word);
 	app.use("/comment", Comments);
 	app.use("/chat", Chat);
+	app.use("/kana", Kana);
 
 	app.get("/hello", (req, res) => {
 		res.send("Hello World!");
