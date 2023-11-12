@@ -57,7 +57,12 @@ router.get("/list", async (req, res) => {
 				"tags",
 				"createDate",
 				"thumbnail",
-				"abstract"
+				"abstract",
+				"jaTitle",
+				"jaContent",
+				"jaAuthor",
+				"jaAbstract",
+				"jaTags"
 			],
 			order: [["id", "DESC"]],
 			where: filters?.category
@@ -79,7 +84,23 @@ router.get("/:id", async (req, res) => {
 			where: {
 				id: req.params.id
 			},
-			attributes: ["id", "uid", "title", "content", "author", "category", "tags", "createDate", "thumbnail", "abstract"]
+			attributes: [
+				"id",
+				"uid",
+				"title",
+				"content",
+				"author",
+				"category",
+				"tags",
+				"createDate",
+				"thumbnail",
+				"abstract",
+				"jaTitle",
+				"jaContent",
+				"jaAuthor",
+				"jaAbstract",
+				"jaTags"
+			]
 		});
 
 		// 如果 article 不存在，这代表文章不存在，返回 404

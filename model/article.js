@@ -21,26 +21,47 @@ const Article = sequelize.define("articles", {
 		type: DataTypes.STRING(255),
 		comment: "文章标题"
 	},
+	jaTitle: {
+		type: DataTypes.STRING(255),
+		comment: "日文标题"
+	},
 	content: {
 		type: DataTypes.TEXT,
 		comment: "文章内容"
+	},
+	jaContent: {
+		type: DataTypes.TEXT,
+		comment: "日文内容"
 	},
 	abstract: {
 		type: DataTypes.TEXT,
 		comment: "文章摘要"
 	},
+	jaAbstract: {
+		type: DataTypes.TEXT,
+		comment: "日文摘要"
+	},
 	author: {
 		type: DataTypes.STRING(255),
 		comment: "文章作者"
 	},
+	jaAuthor: {
+		type: DataTypes.STRING(255),
+		comment: "日文作者"
+	},
 	category: {
 		type: DataTypes.ENUM,
-		values: ["网络互联", "语言学习", "喵随笔", "test", "其它"],
+		// values: ["网络互联", "语言学习", "喵随笔", "test", "其它"],
+		values: ["0", "1", "2", "3", "4"],
 		comment: "文章分类"
 	},
 	tags: {
 		type: DataTypes.STRING(255),
 		comment: "文章标签"
+	},
+	jaTags: {
+		type: DataTypes.STRING(255),
+		comment: "日文标签"
 	},
 	createDate: {
 		type: DataTypes.DATEONLY,
