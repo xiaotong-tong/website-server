@@ -20,6 +20,7 @@
 	},
 	"homepage": "https://github.com/xiaotong-tong/website-server#readme",
 	"dependencies": {
+		"ali-oss": "^6.18.1",
 		"body-parser": "^1.20.2",
 		"cors": "^2.8.5",
 		"dotenv": "^16.3.1",

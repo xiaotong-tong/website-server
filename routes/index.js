@@ -5,6 +5,7 @@ const word = require("./word.js");
 const Comments = require("./comment.js");
 const Chat = require("./chat.js");
 const Kana = require("./kana.js");
+const UploadImage = require("./oss/uploadImage.js");
 
 const chatLimiter = require("./limit.js");
 
@@ -19,6 +20,7 @@ const routes = (app) => {
 	app.use("/comment", Comments);
 	app.use("/chat", Chat);
 	app.use("/kana", Kana);
+	app.use("/oss/image", UploadImage);
 
 	app.get("/hello", (req, res) => {
 		res.send("Hello World!");
