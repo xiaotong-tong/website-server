@@ -31,8 +31,6 @@ router.get("/quotes", async (req, res) => {
 			return;
 		}
 
-		console.log(quotesList);
-
 		const data = quotesList.list?.[key];
 
 		res.send(data);
