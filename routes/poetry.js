@@ -30,8 +30,19 @@ router.get("/quotes", async (req, res) => {
 			res.status(400).send("缺少参数 key");
 			return;
 		}
+		if (key <= 0) {
+			res.status(400).send("key 不能小于 1");
+			return;
+		}
+		if (key > quotesList.quotesCount) {
+			res.status(400).send({
+				message: "key 超出范围",
+				maxKey: quotesList.quotesCount
+			});
+			return;
+		}
 
-		const data = quotesList.list?.[key];
+		const data = quotesList.list?.[key - 1];
 
 		res.send(data);
 	} catch (error) {
