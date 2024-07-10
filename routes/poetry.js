@@ -72,4 +72,12 @@ router.get("/quotes/list", async (req, res) => {
 	}
 });
 
+router.get("/poetry/self", async (req, res) => {
+	try {
+		res.send(quotesList.poetryList);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+});
+
 module.exports = router;
