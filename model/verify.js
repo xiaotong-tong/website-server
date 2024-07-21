@@ -10,14 +10,19 @@ const Verify = sequelize.define("verifies", {
 		autoIncrement: true
 	},
 	name: {
-		type: DataTypes.STRING(64),
-		allowNull: false
+		type: DataTypes.STRING(64)
+		// allowNull: false
 	},
 	password: {
 		type: DataTypes.UUID,
 		defaultValue: DataTypes.UUIDV4,
 		allowNull: false,
 		comment: "验证口令"
+	},
+	qq: {
+		type: DataTypes.STRING(64),
+		// allowNull: false,
+		comment: "QQ号"
 	}
 });
 
