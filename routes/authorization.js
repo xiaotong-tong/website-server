@@ -6,13 +6,19 @@ async function authenticate(req, res, next) {
 	const authHeader = req.headers.authorization;
 
 	if (authHeader?.startsWith("Bearer ")) {
-		const verify = await Verify.findOne({
-			where: {
-				name: "master"
+		const key = authHeader.slice(7);
+		const verify = await Verify.findOne(
+			{
+				where: {
+					password: key
+				}
+			},
+			{
+				raw: true
 			}
-		});
+		);
 
-		if (authHeader.slice(7) === verify.password) {
+		if (verify) {
 			req.passed = true;
 			next();
 			return;
