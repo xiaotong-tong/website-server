@@ -55,28 +55,34 @@ async function connectWS() {
 					if (message) {
 						const text = message.text;
 						if (data.type === "FriendMessage") {
+							const nickName = data.sender.nickname;
 							friendCallbackList?.forEach((callback) => {
 								callback({
 									qq: senderQQ,
-									message: text
+									message: text,
+									nickName: nickName
 								});
 							});
 						} else if (data.type === "GroupMessage") {
 							const senderGroupNo = data.sender.group.id;
+							const nickName = data.sender.memberName;
 							groupCallbackList?.forEach((callback) => {
 								callback({
 									qq: senderQQ,
 									groupNo: senderGroupNo,
-									message: text
+									message: text,
+									nickName: nickName
 								});
 							});
 						} else if (data.type === "TempMessage") {
 							const senderGroupNo = data.sender.group.id;
+							const nickName = data.sender.nickname;
 							tempCallbackList?.forEach((callback) => {
 								callback({
 									qq: senderQQ,
 									groupNo: senderGroupNo,
-									message: text
+									message: text,
+									nickName: nickName
 								});
 							});
 						}

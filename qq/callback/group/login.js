@@ -1,7 +1,7 @@
 const Import = require("../../verify.js");
 const Verify = require("../../../model/verify.js");
 
-async function doLogin({ qq, groupNo, message }) {
+async function doLogin({ qq, groupNo, message, nickName }) {
 	if (message === "登录") {
 		// 如果有当前qq的，就删除，然后重新创建新的。
 		await Verify.destroy({
@@ -11,7 +11,8 @@ async function doLogin({ qq, groupNo, message }) {
 		});
 
 		const item = await Verify.create({
-			qq: qq
+			qq: qq,
+			nickName: nickName
 		});
 
 		Import.sendGroupMessage(groupNo, [
