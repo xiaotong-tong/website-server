@@ -22,13 +22,13 @@ router.get("/list", async (req, res) => {
 
 router.post("/add", async (req, res) => {
 	try {
-		const { url } = req.body;
+		const { url, bot } = req.body;
 
 		let newPhoto;
 		if (typeof url === "string") {
-			newPhoto = await photos.create({ url });
+			newPhoto = await photos.create({ url, botUse: !!bot });
 		} else if (Array.isArray(url)) {
-			newPhoto = await photos.bulkCreate(url.map((item) => ({ url: item })));
+			newPhoto = await photos.bulkCreate(url.map((item) => ({ url: item, botUse: !!bot })));
 		} else {
 			res.status(400).send("url is required");
 			return false;

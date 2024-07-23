@@ -13,6 +13,12 @@ const photos = sequelize.define("photos", {
 		type: DataTypes.STRING(255),
 		allowNull: false,
 		comment: "图片地址"
+	},
+	botUse: {
+		type: DataTypes.BOOLEAN,
+		allowNull: false,
+		defaultValue: false,
+		comment: "是否是 bot 使用图片"
 	}
 });
 
