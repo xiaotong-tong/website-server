@@ -223,3 +223,5 @@ require("./callback/friend/login.js");
 require("./callback/temp/login.js");
 
 require("./callback/group/photo.js");
+
+require("./callback/group/days.js");
