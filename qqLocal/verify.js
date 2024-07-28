@@ -1,3 +1,4 @@
+require("dotenv").config();
 const WebSocket = require("ws");
 
 const url = `wss://qq.xtt.moe//wsUrl/message?verifyKey=${process.env.QQ_VERIFY_KEY}&qq=${process.env.QQ_NUMBER}`;
@@ -121,16 +122,6 @@ async function connectWS() {
 
 connectWS();
 
-// async function bindSession(session) {
-// 	return fetch("https://qq.xtt.moe/bind", {
-// 		method: "POST",
-// 		body: JSON.stringify({
-// 			sessionKey: session,
-// 			qq: process.env.QQ_NUMBER
-// 		})
-// 	}).then((response) => response.json());
-// }
-
 function sendFriendMessage(target, messageChain) {
 	if (!target) {
 		console.error("No target specified");
@@ -237,6 +228,8 @@ module.exports = {
 };
 
 // 导入 callback 模块
-require("./callback/group/login.js");
-require("./callback/friend/login.js");
-require("./callback/temp/login.js");
+require("./callback/group/photo.js");
+
+require("./callback/group/days.js");
+
+require("./callback/group/web.js");

@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node index.js",
-		"dev:chat": "node ./qianfan/ernie-bot.js"
+		"dev:chat": "node ./qianfan/ernie-bot.js",
+		"qq": "node ./qqLocal/verify.js"
 	},
 	"repository": {
 		"type": "git",

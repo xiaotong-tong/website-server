@@ -1,3 +1,4 @@
+const sequelize = require("../../config/db.js");
 const express = require("express");
 const router = express.Router();
 
@@ -36,6 +37,26 @@ router.post("/add", async (req, res) => {
 
 		res.send(newPhoto);
 		newPhoto = null;
+	} catch (error) {
+		res.status(500).send(error);
+	}
+});
+
+router.get("/bot/randomOne", async (req, res) => {
+	try {
+		const photo = await photos.findOne(
+			{
+				where: {
+					botUse: true
+				},
+				order: sequelize.literal("rand()")
+			},
+			{
+				raw: true
+			}
+		);
+
+		res.send(photo);
 	} catch (error) {
 		res.status(500).send(error);
 	}
