@@ -37,14 +37,18 @@ async function connectWS() {
 				try {
 					const data = parsedJson.data;
 
-					// 获取好友列表的返回
-					if (data.code === 0 && data.data?.[0].id === 66600000) {
-						friendListPromiseResolve(data.data);
+					if (data.code === 500) {
 						return;
 					}
 
 					// 忽略自己发送的消息
 					if (!data.sender && data.code === 0) {
+						return;
+					}
+
+					// 获取好友列表的返回
+					if (data.code === 0 && data.data?.[0].id === 66600000) {
+						friendListPromiseResolve(data.data);
 						return;
 					}
 
@@ -57,33 +61,48 @@ async function connectWS() {
 						if (data.type === "FriendMessage") {
 							const nickName = data.sender.nickname;
 							friendCallbackList?.forEach((callback) => {
-								callback({
-									qq: senderQQ,
-									message: text,
-									nickName: nickName
-								});
+								try {
+									callback({
+										qq: senderQQ,
+										message: text,
+										nickName: nickName
+									});
+								} catch (err) {
+									// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行
+									console.error("Error in friend callback:", err);
+								}
 							});
 						} else if (data.type === "GroupMessage") {
 							const senderGroupNo = data.sender.group.id;
 							const nickName = data.sender.memberName;
 							groupCallbackList?.forEach((callback) => {
-								callback({
-									qq: senderQQ,
-									groupNo: senderGroupNo,
-									message: text,
-									nickName: nickName
-								});
+								try {
+									callback({
+										qq: senderQQ,
+										groupNo: senderGroupNo,
+										message: text,
+										nickName: nickName
+									});
+								} catch (err) {
+									// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行
+									console.error("Error in group callback:", err);
+								}
 							});
 						} else if (data.type === "TempMessage") {
 							const senderGroupNo = data.sender.group.id;
 							const nickName = data.sender.nickname;
 							tempCallbackList?.forEach((callback) => {
-								callback({
-									qq: senderQQ,
-									groupNo: senderGroupNo,
-									message: text,
-									nickName: nickName
-								});
+								try {
+									callback({
+										qq: senderQQ,
+										groupNo: senderGroupNo,
+										message: text,
+										nickName: nickName
+									});
+								} catch (err) {
+									// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行
+									console.error("Error in temp callback:", err);
+								}
 							});
 						}
 					}
@@ -225,3 +244,5 @@ require("./callback/temp/login.js");
 require("./callback/group/photo.js");
 
 require("./callback/group/days.js");
+
+require("./callback/group/web.js");
