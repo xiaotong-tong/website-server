@@ -8,25 +8,23 @@ const originDay = dayjs("2024-04-14");
 dayjs.extend(timezone);
 dayjs.tz.setDefault("Asia/Shanghai");
 
-// async function doShareDaysQuotes({ qq, groupNo, message, nickName }) {
-// 	if (message === "/今日日语") {
-// 		const key = dayjs().diff(originDay, "day");
+const puppeteerCache = require("../../units/puppeteerCache.js");
 
-// 		if (key > quotesList.quotesCount) {
-// 			key = key % quotesList.quotesCount;
-// 		}
-
-// 		Import.sendGroupMessage(groupNo, [
-// 			{
-// 				type: "Plain",
-// 				text: quotesList.list[key - 1].sentence
-// 			}
-// 		]);
-// 	}
-// }
+let running = false;
 
 async function doShareDaysQuotesImage({ qq, groupNo, message, nickName }) {
 	if (message === "/今日日语") {
+		if (running) {
+			Import.sendGroupMessage(groupNo, [
+				{
+					type: "Plain",
+					text: "正在当前任务中，请稍候再试。"
+				}
+			]);
+			return;
+		}
+
+		running = true;
 		const key = dayjs().diff(originDay, "day");
 
 		if (key > quotesList.quotesCount) {
@@ -38,6 +36,9 @@ async function doShareDaysQuotesImage({ qq, groupNo, message, nickName }) {
 			args: ["--no-sandbox", "--ignore-certificate-errors"]
 		});
 		const page = await browser.newPage();
+
+		await puppeteerCache(page);
+
 		await page.goto("https://xtt.moe/bot/ruby");
 
 		await page.waitForSelector("#bot-ruby");
@@ -75,6 +76,7 @@ async function doShareDaysQuotesImage({ qq, groupNo, message, nickName }) {
 		]);
 
 		image = null;
+		running = false;
 		await browser.close();
 	}
 }
