@@ -54,4 +54,15 @@ async function doShareWebHome({ qq, groupNo, message, nickName }) {
 	}
 }
 
-Import.groupCallbackList.push(doShareWebHome);
+async function doShareHello({ qq, groupNo, message, nickName }) {
+	if (message === "/hello") {
+		Import.sendGroupMessage(groupNo, [
+			{
+				type: "Plain",
+				text: "World!"
+			}
+		]);
+	}
+}
+
+Import.groupCallbackList.push(doShareWebHome, doShareHello);
