@@ -31,10 +31,11 @@ async function doShareWebHome({ qq, groupNo, message, nickName }) {
 
 		await puppeteerCache(page);
 
-		await page.goto("https://xtt.moe", {
-			waitUntil: "networkidle0",
+		await page.goto("https://xtt.moe?animeLess=true", {
 			timeout: 0
 		});
+
+		await page.waitForSelector("#hefu.text-justify");
 
 		// 截取元素的图片
 		let image = await page.screenshot({
