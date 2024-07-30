@@ -56,11 +56,11 @@ async function doShareWebHome({ qq, groupNo, message, nickName }) {
 }
 
 async function doShareHello({ qq, groupNo, message, nickName }) {
-	if (message === "/hello") {
+	if (message === "/ping") {
 		Import.sendGroupMessage(groupNo, [
 			{
 				type: "Plain",
-				text: "World!"
+				text: "喵喵喵~"
 			}
 		]);
 	}

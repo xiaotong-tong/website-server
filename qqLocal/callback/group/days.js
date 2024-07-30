@@ -39,7 +39,9 @@ async function doShareDaysQuotesImage({ qq, groupNo, message, nickName }) {
 
 		await puppeteerCache(page);
 
-		await page.goto("https://xtt.moe/bot/ruby");
+		await page.goto("https://xtt.moe/bot/ruby", {
+			timeout: 0
+		});
 
 		await page.waitForSelector("#bot-ruby");
 
