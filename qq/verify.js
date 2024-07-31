@@ -240,3 +240,5 @@ module.exports = {
 require("./callback/group/login.js");
 require("./callback/friend/login.js");
 require("./callback/temp/login.js");
+
+require("./callback/group/curl.js");
