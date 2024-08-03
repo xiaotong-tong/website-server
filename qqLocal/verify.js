@@ -229,7 +229,6 @@ module.exports = {
 
 // 导入 callback 模块
 require("./callback/group/photo.js");
-
 require("./callback/group/days.js");
-
 require("./callback/group/web.js");
+require("./callback/group/kana.js");

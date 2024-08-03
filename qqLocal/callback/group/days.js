@@ -25,7 +25,7 @@ async function doShareDaysQuotesImage({ qq, groupNo, message, nickName }) {
 		}
 
 		running = true;
-		const key = dayjs().diff(originDay, "day");
+		let key = dayjs().diff(originDay, "day");
 
 		if (key > quotesList.quotesCount) {
 			key = key % quotesList.quotesCount;
