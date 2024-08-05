@@ -36,6 +36,7 @@
 		"mysql2": "^3.5.1",
 		"node-cron": "^3.0.2",
 		"puppeteer": "^22.14.0",
+		"qrcode": "^1.5.3",
 		"sequelize": "^6.32.1",
 		"shell-quote": "^1.8.1",
 		"ttf2woff2": "^5.0.0",
