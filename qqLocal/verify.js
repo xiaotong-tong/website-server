@@ -233,3 +233,4 @@ require("./callback/group/days.js");
 require("./callback/group/web.js");
 require("./callback/group/kana.js");
 require("./callback/group/qrcode.js");
+require("./callback/group/help.js");

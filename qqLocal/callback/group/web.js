@@ -55,15 +55,4 @@ async function doShareWebHome({ qq, groupNo, message, nickName }) {
 	}
 }
 
-async function doShareHello({ qq, groupNo, message, nickName }) {
-	if (message === "/ping") {
-		Import.sendGroupMessage(groupNo, [
-			{
-				type: "Plain",
-				text: "喵喵喵~"
-			}
-		]);
-	}
-}
-
-Import.groupCallbackList.push(doShareWebHome, doShareHello);
+Import.groupCallbackList.push(doShareWebHome);
