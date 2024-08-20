@@ -241,7 +241,6 @@ async function sendGroupMessage(target, messageChain) {
 		};
 	}
 
-	console.log("Sending message to", qqUrl, JSON.stringify(messageChain));
 	const response = await fetch(qqUrl, {
 		method: "POST",
 		headers: {
@@ -268,3 +267,4 @@ module.exports = {
 // 导入 callback 模块
 require("./callback/group/test.js");
 require("./callback/group/qrcode.js");
+require("./callback/group/days.js");
