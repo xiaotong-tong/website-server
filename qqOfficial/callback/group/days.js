@@ -15,11 +15,10 @@ async function doShareDaysQuotesImage(d) {
 			key = key % quotesList.quotesCount;
 		}
 
-		console.log(quotesList.list[key - 1].sentence);
-
 		Import.sendGroupMessage(d.group_openid, {
 			content: quotesList.list[key - 1].sentence,
-			msg_type: 0
+			msg_type: 0,
+			msg_id: d.id // 必填，用来确认是被动回复的标志
 		});
 	}
 }

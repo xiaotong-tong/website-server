@@ -41,7 +41,8 @@ async function sendQRCode(d) {
 
 						Import.sendGroupMessage(d.group_openid, {
 							content: "生成二维码失败",
-							msg_type: 0
+							msg_type: 0,
+							msg_id: d.id // 必填，用来确认是被动回复的标志
 						});
 						return;
 					}
@@ -55,7 +56,8 @@ async function sendQRCode(d) {
 						type: 1,
 						file_type: 1,
 						url: resUrl,
-						srv_send_msg: false
+						srv_send_msg: false,
+						msg_id: d.id // 必填，用来确认是被动回复的标志
 					});
 				}
 			);

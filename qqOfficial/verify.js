@@ -237,7 +237,8 @@ async function sendGroupMessage(target, messageChain) {
 		const data = await response.json();
 		messageChain = {
 			msg_type: 7,
-			media: data
+			media: data,
+			msg_id: messageChain.msg_id
 		};
 	}
 
@@ -265,6 +266,5 @@ module.exports = {
 };
 
 // 导入 callback 模块
-require("./callback/group/test.js");
 require("./callback/group/qrcode.js");
 require("./callback/group/days.js");
