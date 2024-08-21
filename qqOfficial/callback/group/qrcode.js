@@ -26,6 +26,17 @@ async function uploadLocalImage() {
 async function sendQRCode(d) {
 	if (d.content.trim().startsWith("/二维码")) {
 		try {
+			const content = d.content.trim().slice(4).trim();
+
+			if (!content) {
+				Import.sendGroupMessage(d.group_openid, {
+					content: "请输入正确的内容，例如格式为：/二维码 hello world",
+					msg_type: 0,
+					msg_id: d.id // 必填，用来确认是被动回复的标志
+				});
+				return;
+			}
+
 			QRCode.toFile(
 				path.join(__dirname, "qrcode.png"),
 				d.content.slice(4).trim(),

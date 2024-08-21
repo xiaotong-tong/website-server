@@ -267,4 +267,5 @@ module.exports = {
 
 // 导入 callback 模块
 require("./callback/group/qrcode.js");
+require("./callback/group/encodeQrcode.js");
 require("./callback/group/days.js");
