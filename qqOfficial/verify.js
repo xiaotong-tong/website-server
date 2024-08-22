@@ -90,6 +90,16 @@ async function connectWS(url) {
 						console.error("Error in group callback:", err);
 					}
 				});
+			} else if (parsedJson.op === 0 && parsedJson.t === "C2C_MESSAGE_CREATE") {
+				seq = parsedJson.s;
+				friendCallbackList?.forEach((callback) => {
+					try {
+						callback(parsedJson.d);
+					} catch (err) {
+						// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行
+						console.error("Error in friend callback:", err);
+					}
+				});
 			}
 
 			if (parsedJson.syncId === "") {
@@ -257,9 +267,52 @@ async function sendGroupMessage(target, messageChain) {
 	return data;
 }
 
+async function sendFriendMessage(target, messageChain) {
+	if (!target) {
+		console.error("No target specified");
+		return;
+	}
+
+	let qqUrl = `${domain}/v2/users/${target}/messages`;
+
+	if (messageChain.type === 1) {
+		const mediaUrl = `${domain}/v2/users/${target}/files`;
+
+		const response = await fetch(mediaUrl, {
+			method: "POST",
+			headers: {
+				Authorization: `QQBot ${accessToken}`,
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(messageChain)
+		});
+		const data = await response.json();
+		messageChain = {
+			msg_type: 7,
+			media: data,
+			msg_id: messageChain.msg_id
+		};
+	}
+
+	const response = await fetch(qqUrl, {
+		method: "POST",
+		headers: {
+			Authorization: `QQBot ${accessToken}`,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(messageChain)
+	});
+
+	const data = await response.json();
+
+	console.log(data);
+	return data;
+}
+
 module.exports = {
 	ws,
 	sendGroupMessage,
+	sendFriendMessage,
 	groupCallbackList,
 	friendCallbackList,
 	tempCallbackList
@@ -269,3 +322,5 @@ module.exports = {
 require("./callback/group/qrcode.js");
 require("./callback/group/encodeQrcode.js");
 require("./callback/group/days.js");
+
+require("./callback/friend/login.js");

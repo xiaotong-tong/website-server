@@ -24,6 +24,11 @@ const Verify = sequelize.define("verifies", {
 		// allowNull: false,
 		comment: "QQ号"
 	},
+	qqOpenId: {
+		type: DataTypes.STRING(64),
+		// allowNull: false,
+		comment: "QQ开放ID"
+	},
 	qqName: {
 		type: DataTypes.STRING(64),
 		// allowNull: false,

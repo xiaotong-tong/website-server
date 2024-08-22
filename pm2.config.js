@@ -1,8 +1,8 @@
 module.exports = {
 	apps: [
 		{
-			name: "qqLocal worker",
-			script: "./qqLocal/verify.js"
+			name: "mirai qq worker",
+			script: "./qq/verify.js"
 		},
 		{
 			name: "qqOfficial worker",

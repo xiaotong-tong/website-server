@@ -1,3 +1,4 @@
+require("dotenv").config();
 const WebSocket = require("ws");
 
 const url = `wss://qq.xtt.moe//wsUrl/message?verifyKey=${process.env.QQ_VERIFY_KEY}&qq=${process.env.QQ_NUMBER}`;
