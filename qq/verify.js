@@ -30,7 +30,7 @@ async function connectWS() {
 	ws.on("message", async function incoming(data) {
 		if (Buffer.isBuffer(data)) {
 			const str = data.toString("utf-8");
-			console.log("str", str);
+			// console.log("str", str);
 			const parsedJson = JSON.parse(str);
 			if (parsedJson.syncId === "") {
 				session = parsedJson.data.session;

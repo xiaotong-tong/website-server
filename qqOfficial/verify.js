@@ -34,7 +34,7 @@ async function connectWS(url) {
 	ws.on("message", async function incoming(data) {
 		if (Buffer.isBuffer(data)) {
 			const str = data.toString("utf-8");
-			console.log("str", str);
+			// console.log("str", str);
 			const parsedJson = JSON.parse(str);
 
 			// 成功创建连接，心跳包
@@ -72,7 +72,6 @@ async function connectWS(url) {
 				ws.send(JSON.stringify(response));
 			} else if (parsedJson.op === 11) {
 				// 收到心跳回应
-				console.log("Heartbeat ACK");
 				setTimeout(() => {
 					const response = {
 						op: 1,
@@ -263,7 +262,6 @@ async function sendGroupMessage(target, messageChain) {
 
 	const data = await response.json();
 
-	console.log(data);
 	return data;
 }
 
@@ -305,7 +303,6 @@ async function sendFriendMessage(target, messageChain) {
 
 	const data = await response.json();
 
-	console.log(data);
 	return data;
 }
 
@@ -319,8 +316,15 @@ module.exports = {
 };
 
 // 导入 callback 模块
+// 群聊回调列表
 require("./callback/group/qrcode.js");
 require("./callback/group/encodeQrcode.js");
 require("./callback/group/days.js");
+require("./callback/group/kana.js");
 
+// 私聊回调列表
 require("./callback/friend/login.js");
+require("./callback/friend/days.js");
+require("./callback/friend/qrcode.js");
+require("./callback/friend/encodeQrcode.js");
+require("./callback/friend/kana.js");

@@ -8,3 +8,4 @@ package-lock.json
 # 临时文件
 uploads/
 font_cache/
+qrcode.png

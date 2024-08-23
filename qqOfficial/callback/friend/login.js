@@ -15,8 +15,6 @@ async function doLogin(d) {
 			qqOpenId: qq
 		});
 
-		console.log(item);
-
 		Import.sendFriendMessage(qq, {
 			content: `您的登录口令为\n${item.password}\n请勿泄露哦(◍＞◡＜◍)`,
 			msg_type: 0,
