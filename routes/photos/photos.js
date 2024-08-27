@@ -6,10 +6,20 @@ const photos = require("../../model/photos.js");
 
 router.get("/list", async (req, res) => {
 	try {
+		const { botUse } = req.query;
+
 		const photosList = await photos.findAll(
 			{
-				attributes: ["id", "url"],
-				order: [["id", "ASC"]]
+				attributes: ["id", "url", "botUse"],
+				order: [["id", "ASC"]],
+				where: Object.assign(
+					{},
+					botUse === undefined
+						? {}
+						: {
+								botUse: botUse === "true" ? true : false
+						  }
+				)
 			},
 			{
 				raw: true
