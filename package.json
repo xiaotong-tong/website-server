@@ -42,13 +42,13 @@
 		"mysql2": "^3.5.1",
 		"node-cron": "^3.0.2",
 		"puppeteer": "^22.14.0",
-		"qq-guild-bot": "github:tencent-connect/bot-node-sdk",
 		"qrcode": "^1.5.3",
 		"sequelize": "^6.32.1",
 		"shell-quote": "^1.8.1",
 		"ttf2woff2": "^5.0.0",
 		"ws": "^8.18.0",
 		"xss": "^1.0.14",
+		"xtt-msg": "^2.0.1-alpha.6",
 		"xtt-utils": "^0.1.2"
 	}
 }

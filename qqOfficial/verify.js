@@ -328,3 +328,4 @@ require("./callback/friend/days.js");
 require("./callback/friend/qrcode.js");
 require("./callback/friend/encodeQrcode.js");
 require("./callback/friend/kana.js");
+require("./callback/friend/miao.js");
