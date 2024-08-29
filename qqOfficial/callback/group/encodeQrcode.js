@@ -10,7 +10,7 @@ async function sendEncodeQRCode(d) {
 
 			if (!url) {
 				Import.sendGroupMessage(d.group_openid, {
-					content: "未找到要解析的内容QAQ",
+					content: "未找到要解析的二维码QAQ",
 					msg_type: 0,
 					msg_id: d.id // 必填，用来确认是被动回复的标志
 				});
@@ -26,8 +26,6 @@ async function sendEncodeQRCode(d) {
 				const pixelData = image.bitmap.data;
 
 				const code = jsQR(pixelData, image.bitmap.width, image.bitmap.height);
-
-				console.log(code);
 
 				if (!code?.data) {
 					Import.sendGroupMessage(d.group_openid, {

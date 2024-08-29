@@ -83,6 +83,7 @@ async function connectWS(url) {
 				seq = parsedJson.s;
 				groupCallbackList?.forEach((callback) => {
 					try {
+						parsedJson.d.formatContent = parsedJson.d.content.trimStart();
 						callback(parsedJson.d);
 					} catch (err) {
 						// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行
@@ -93,6 +94,7 @@ async function connectWS(url) {
 				seq = parsedJson.s;
 				friendCallbackList?.forEach((callback) => {
 					try {
+						parsedJson.d.formatContent = parsedJson.d.content.trimStart();
 						callback(parsedJson.d);
 					} catch (err) {
 						// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行

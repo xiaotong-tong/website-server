@@ -6,9 +6,9 @@ const fs = require("fs");
 const axios = require("axios");
 const FormData = require("form-data");
 
-async function uploadLocalImage() {
+async function uploadLocalImage(filePath) {
 	const fd = new FormData();
-	fd.append("source", fs.createReadStream(path.join(__dirname, "qrcode.png")));
+	fd.append("source", fs.createReadStream(filePath));
 
 	const res = await axios.post(
 		`https://api.xtt.moe/api/image/upload/?key=${process.env.CHEVERETO_KEY}&format=json`,
@@ -37,8 +37,15 @@ async function sendQRCode(d) {
 				return;
 			}
 
+			const qrCodePath = path.join(__dirname, `/cache/qrcode-${Date.now()}.png`);
+
+			// 如果没有 cache 文件夹，就创建一个
+			if (!fs.existsSync(path.join(__dirname, "/cache"))) {
+				fs.mkdirSync(path.join(__dirname, "/cache"));
+			}
+
 			QRCode.toFile(
-				path.join(__dirname, "qrcode.png"),
+				qrCodePath,
 				d.content.slice(4).trim(),
 				{
 					type: "terminal",
@@ -46,7 +53,7 @@ async function sendQRCode(d) {
 					errorCorrectionLevel: "H",
 					margin: 1
 				},
-				async (err, buffer) => {
+				async (err) => {
 					if (err) {
 						console.error(err);
 
@@ -58,7 +65,7 @@ async function sendQRCode(d) {
 						return;
 					}
 
-					let resUrl = await uploadLocalImage();
+					let resUrl = await uploadLocalImage(qrCodePath);
 
 					resUrl = resUrl.image.url;
 					resUrl = resUrl.replace("https://image.xtt.moe/", "https://image.xtt.moe/local/");
@@ -69,6 +76,13 @@ async function sendQRCode(d) {
 						url: resUrl,
 						srv_send_msg: false,
 						msg_id: d.id // 必填，用来确认是被动回复的标志
+					});
+
+					// 删除本地文件
+					fs.unlink(qrCodePath, (err) => {
+						if (err) {
+							console.error(err);
+						}
 					});
 				}
 			);
