@@ -8,7 +8,8 @@
 		"start": "node index.js",
 		"dev:chat": "node ./qianfan/ernie-bot.js",
 		"qq": "node ./qqLocal/verify.js",
-		"qq:bot": "node ./qqOfficial/verify.js"
+		"qq:bot": "node ./qqOfficial/verify.js",
+		"qq:sandbox": "node ./qqOfficial/verify.js --env sandbox=true"
 	},
 	"repository": {
 		"type": "git",

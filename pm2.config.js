@@ -7,6 +7,13 @@ module.exports = {
 		{
 			name: "qqOfficial worker",
 			script: "./qqOfficial/verify.js"
+		},
+		{
+			name: "qqOfficial sandbox worker",
+			script: "./qqOfficial/verify.js",
+			env: {
+				sandbox: "true" // 环境变量
+			}
 		}
 	]
 };

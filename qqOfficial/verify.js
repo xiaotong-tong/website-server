@@ -1,7 +1,8 @@
 require("dotenv").config();
 const WebSocket = require("ws");
 
-const domain = "https://sandbox.api.sgroup.qq.com";
+const domain = process.env.sandbox ? "https://sandbox.api.sgroup.qq.com" : "https://api.sgroup.qq.com";
+
 let accessToken;
 let ws;
 let session;
@@ -221,8 +222,16 @@ async function getUrl() {
 			Authorization: `QQBot ${accessToken}`
 		}
 	});
-	const data = await response.json();
-	connectWS(data.url);
+
+	if (response.status === 401) {
+		// 认证失败， 十分钟后重试
+		setTimeout(getUrl, 600000);
+		return;
+	} else if (response.status === 200) {
+		const data = await response.json();
+
+		connectWS(data.url);
+	}
 }
 getUrl();
 
@@ -323,6 +332,7 @@ require("./callback/group/qrcode.js");
 require("./callback/group/encodeQrcode.js");
 require("./callback/group/days.js");
 require("./callback/group/kana.js");
+require("./callback/group/miao.js");
 
 // 私聊回调列表
 require("./callback/friend/login.js");

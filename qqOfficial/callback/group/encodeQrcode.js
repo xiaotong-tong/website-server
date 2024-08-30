@@ -10,7 +10,7 @@ async function sendEncodeQRCode(d) {
 
 			if (!url) {
 				Import.sendGroupMessage(d.group_openid, {
-					content: "未找到要解析的二维码QAQ",
+					content: "涟没有找到要解析的图片QAQ",
 					msg_type: 0,
 					msg_id: d.id // 必填，用来确认是被动回复的标志
 				});
@@ -20,6 +20,11 @@ async function sendEncodeQRCode(d) {
 			Jimp.read(url, (err, image) => {
 				if (err) {
 					console.error(err);
+					Import.sendGroupMessage(d.group_openid, {
+						content: "解析图片失败了，涟也不知道为什么QAQ",
+						msg_type: 0,
+						msg_id: d.id // 必填，用来确认是被动回复的标志
+					});
 					return;
 				}
 
@@ -29,7 +34,7 @@ async function sendEncodeQRCode(d) {
 
 				if (!code?.data) {
 					Import.sendGroupMessage(d.group_openid, {
-						content: "未找到二维码QAQ",
+						content: "啊咧，涟没有在图片中找到二维码",
 						msg_type: 0,
 						msg_id: d.id // 必填，用来确认是被动回复的标志
 					});
