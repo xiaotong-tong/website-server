@@ -3,10 +3,9 @@ const Verify = require("../model/verify.js");
 // 验证口令, 如果通过则设置 req.passed 为 true, 否则为 false
 
 async function authenticate(req, res, next) {
-	const authHeader = req.headers.authorization;
+	const key = req.headers.authorization;
 
-	if (authHeader?.startsWith("Bearer ")) {
-		const key = authHeader.slice(7);
+	if (key) {
 		const verify = await Verify.findOne(
 			{
 				where: {

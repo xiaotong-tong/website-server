@@ -4,16 +4,22 @@ const Verify = require("../../../model/verify.js");
 async function doLogin(d) {
 	if (d.content.trim() === "/登录") {
 		const qq = d.author.user_openid;
-		// 如果有当前qq的，就删除，然后重新创建新的。
-		await Verify.destroy({
+		// 如果有当前qq的，就修改密码为新的 UUID
+		let item = await Verify.findOne({
 			where: {
 				qqOpenId: qq
 			}
 		});
 
-		const item = await Verify.create({
-			qqOpenId: qq
-		});
+		if (item) {
+			item = await item.update({
+				password: Verify.sequelize.fn("UUID")
+			});
+		} else {
+			item = await Verify.create({
+				qqOpenId: qq
+			});
+		}
 
 		Import.sendFriendMessage(qq, {
 			content: `您的登录口令为\n${item.password}\n请勿泄露哦(◍＞◡＜◍)`,
