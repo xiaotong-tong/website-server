@@ -9,7 +9,7 @@
 		"dev:chat": "node ./qianfan/ernie-bot.js",
 		"qq": "node ./qqLocal/verify.js",
 		"qq:bot": "node ./qqOfficial/verify.js",
-		"qq:sandbox": "node ./qqOfficial/verify.js --env sandbox=true"
+		"qq:sandbox": "cross-env sandbox=true node ./qqOfficial/verify.js"
 	},
 	"repository": {
 		"type": "git",
@@ -51,5 +51,8 @@
 		"xss": "^1.0.14",
 		"xtt-msg": "^2.0.1-alpha.6",
 		"xtt-utils": "^0.1.2"
+	},
+	"devDependencies": {
+		"cross-env": "^7.0.3"
 	}
 }

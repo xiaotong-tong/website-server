@@ -5,19 +5,11 @@ const domain = process.env.sandbox ? "https://sandbox.api.sgroup.qq.com" : "http
 
 let accessToken;
 let ws;
-let session;
 let seq;
-let sessionID;
 let heartbeatInterval;
 
 const groupCallbackList = [];
 const friendCallbackList = [];
-const tempCallbackList = [];
-
-let friendListPromiseResolve;
-const friendListPromise = new Promise((resolve) => {
-	friendListPromiseResolve = resolve;
-});
 
 async function connectWS(url) {
 	console.log("Connecting to WebSocket", url);
@@ -35,7 +27,7 @@ async function connectWS(url) {
 	ws.on("message", async function incoming(data) {
 		if (Buffer.isBuffer(data)) {
 			const str = data.toString("utf-8");
-			// console.log("str", str);
+			console.log("str", str);
 			const parsedJson = JSON.parse(str);
 
 			// 成功创建连接，心跳包
@@ -47,7 +39,7 @@ async function connectWS(url) {
 				const response = {
 					op: 2,
 					d: {
-						token: `Bot ${process.env.QQ_BOT_ID}.${process.env.QQ_BOT_TOKEN}`,
+						token: `QQBot ${accessToken}`,
 						intents: (1 << 30) | (1 << 0) | (1 << 1) | (1 << 25),
 						shard: [0, 1],
 						properties: {
@@ -103,87 +95,6 @@ async function connectWS(url) {
 					}
 				});
 			}
-
-			if (parsedJson.syncId === "") {
-				session = parsedJson.data.session;
-			} else if (parsedJson.syncId === "-1") {
-				try {
-					const data = parsedJson.data;
-
-					if (data.code === 500) {
-						return;
-					}
-
-					// 忽略自己发送的消息
-					if (!data.sender && data.code === 0) {
-						return;
-					}
-
-					// 获取好友列表的返回
-					if (data.code === 0 && data.data?.[0].id === 66600000) {
-						friendListPromiseResolve(data.data);
-						return;
-					}
-
-					const senderQQ = data.sender.id;
-					const messageChain = data.messageChain;
-					const message = messageChain.find((message) => message.type === "Plain");
-
-					if (message) {
-						const text = message.text;
-						if (data.type === "FriendMessage") {
-							const nickName = data.sender.nickname;
-							friendCallbackList?.forEach((callback) => {
-								try {
-									callback({
-										qq: senderQQ,
-										message: text,
-										nickName: nickName
-									});
-								} catch (err) {
-									// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行
-									console.error("Error in friend callback:", err);
-								}
-							});
-						} else if (data.type === "GroupMessage") {
-							const senderGroupNo = data.sender.group.id;
-							const nickName = data.sender.memberName;
-							groupCallbackList?.forEach((callback) => {
-								try {
-									callback({
-										qq: senderQQ,
-										groupNo: senderGroupNo,
-										message: text,
-										nickName: nickName
-									});
-								} catch (err) {
-									// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行
-									console.error("Error in group callback:", err);
-								}
-							});
-						} else if (data.type === "TempMessage") {
-							const senderGroupNo = data.sender.group.id;
-							const nickName = data.sender.nickname;
-							tempCallbackList?.forEach((callback) => {
-								try {
-									callback({
-										qq: senderQQ,
-										groupNo: senderGroupNo,
-										message: text,
-										nickName: nickName
-									});
-								} catch (err) {
-									// 捕获错误，防止一个 callback 出错导致其他 callback 无法执行
-									console.error("Error in temp callback:", err);
-								}
-							});
-						}
-					}
-				} catch (err) {
-					console.error("Error parsing message:", err);
-					console.log("str", str);
-				}
-			}
 		}
 	});
 
@@ -194,43 +105,54 @@ async function connectWS(url) {
 
 async function getAppAccessToken() {
 	const qqUrl = "https://bots.qq.com/app/getAppAccessToken";
-	const response = await fetch(qqUrl, {
-		method: "POST",
-		body: JSON.stringify({
-			appId: process.env.QQ_BOT_ID,
-			clientSecret: process.env.QQ_BOT_SECRET
-		}),
-		headers: {
-			"Content-Type": "application/json"
-		}
-	});
-	const data = await response.json();
-	accessToken = data.access_token;
+	try {
+		const response = await fetch(qqUrl, {
+			method: "POST",
+			body: JSON.stringify({
+				appId: process.env.QQ_BOT_ID,
+				clientSecret: process.env.QQ_BOT_SECRET
+			}),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+		const data = await response.json();
+		accessToken = data.access_token;
 
-	setTimeout(getAppAccessToken, data.expires_in * 1000);
-	return data.accessToken;
+		setTimeout(getAppAccessToken, data.expires_in * 1000);
+		return data.accessToken;
+	} catch (err) {
+		console.error("Error in getAppAccessToken:", err);
+	}
 }
 
 async function getUrl() {
 	await getAppAccessToken();
 
 	const qqUrl = domain + "/gateway";
-	const response = await fetch(qqUrl, {
-		method: "GET",
-		headers: {
-			// Authorization: `Bot ${process.env.QQ_BOT_ID}.${process.env.QQ_BOT_TOKEN}`
-			Authorization: `QQBot ${accessToken}`
+
+	console.log(qqUrl);
+
+	try {
+		const response = await fetch(qqUrl, {
+			method: "GET",
+			headers: {
+				// Authorization: `Bot ${process.env.QQ_BOT_ID}.${process.env.QQ_BOT_TOKEN}`
+				Authorization: `QQBot ${accessToken}`
+			}
+		});
+
+		if (response.status === 401) {
+			// 认证失败， 十分钟后重试
+			setTimeout(getUrl, 600000);
+			return;
+		} else if (response.status === 200) {
+			const data = await response.json();
+
+			connectWS(data.url);
 		}
-	});
-
-	if (response.status === 401) {
-		// 认证失败， 十分钟后重试
-		setTimeout(getUrl, 600000);
-		return;
-	} else if (response.status === 200) {
-		const data = await response.json();
-
-		connectWS(data.url);
+	} catch (err) {
+		console.error("Error in getUrl:", err);
 	}
 }
 getUrl();
@@ -322,8 +244,7 @@ module.exports = {
 	sendGroupMessage,
 	sendFriendMessage,
 	groupCallbackList,
-	friendCallbackList,
-	tempCallbackList
+	friendCallbackList
 };
 
 // 导入 callback 模块
