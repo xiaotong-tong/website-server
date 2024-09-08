@@ -44,7 +44,13 @@ router.post("/add", async (req, res) => {
 
 router.get("/list", async (req, res) => {
 	try {
-		const filters = req.query?.filters;
+		const { category } = req.query;
+
+		let where = {};
+
+		if (category) {
+			where.category = category;
+		}
 
 		const articles = await Article.findAll({
 			attributes: [
@@ -65,11 +71,7 @@ router.get("/list", async (req, res) => {
 				"jaTags"
 			],
 			order: [["id", "DESC"]],
-			where: filters?.category
-				? {
-						category: filters.category
-				  }
-				: null
+			where: where
 		});
 
 		res.send(articles);
@@ -198,6 +200,21 @@ router.delete("/delete/:id", async (req, res) => {
 		}
 	} else {
 		res.status(401).send("Unauthorized");
+	}
+});
+
+router.get("/category/list", async (req, res) => {
+	try {
+		let categories = await Article.findAll({
+			attributes: ["category"],
+			group: ["category"]
+		});
+
+		categories = categories.map((item) => item.category);
+
+		res.send(categories);
+	} catch (error) {
+		res.status(500).send;
 	}
 });
 

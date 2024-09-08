@@ -49,10 +49,15 @@ const Article = sequelize.define("articles", {
 		type: DataTypes.STRING(255),
 		comment: "日文作者"
 	},
+	// category: {
+	// 	type: DataTypes.ENUM,
+	// 	// values: ["网络互联", "语言学习", "喵随笔", "test", "其它"],
+	// 	values: ["0", "1", "2", "3", "4"],
+	// 	comment: "文章分类"
+	// },
 	category: {
-		type: DataTypes.ENUM,
+		type: DataTypes.STRING(63),
 		// values: ["网络互联", "语言学习", "喵随笔", "test", "其它"],
-		values: ["0", "1", "2", "3", "4"],
 		comment: "文章分类"
 	},
 	tags: {
