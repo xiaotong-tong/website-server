@@ -46,7 +46,9 @@ router.get("/list", async (req, res) => {
 	try {
 		const { category } = req.query;
 
-		let where = {};
+		let where = {
+			isDelete: false
+		};
 
 		if (category) {
 			where.category = category;
@@ -84,7 +86,8 @@ router.get("/:id", async (req, res) => {
 	try {
 		const article = await Article.findOne({
 			where: {
-				id: req.params.id
+				id: req.params.id,
+				isDelete: false
 			},
 			attributes: [
 				"id",
@@ -188,11 +191,17 @@ router.put("/edit/:id", async (req, res) => {
 router.delete("/delete/:id", async (req, res) => {
 	if (req.passed) {
 		try {
-			await Article.destroy({
-				where: {
-					id: req.params.id
+			// 删除文章
+			await Article.update(
+				{
+					isDelete: true
+				},
+				{
+					where: {
+						id: req.params.id
+					}
 				}
-			});
+			);
 
 			res.send("success");
 		} catch (error) {

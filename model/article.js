@@ -75,6 +75,11 @@ const Article = sequelize.define("articles", {
 	thumbnail: {
 		type: DataTypes.STRING(255),
 		comment: "文章缩略图"
+	},
+	isDelete: {
+		type: DataTypes.BOOLEAN,
+		defaultValue: false,
+		comment: "是否已删除"
 	}
 });
 
