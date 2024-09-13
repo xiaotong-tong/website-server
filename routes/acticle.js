@@ -24,7 +24,13 @@ router.post("/add", async (req, res) => {
 				tags: req.body.tags,
 				abstract: req.body.abstract,
 				thumbnail: req.body.thumbnail,
-				createDate: formatDate(new Date(), "yyyy-MM-DD")
+				createDate: formatDate(new Date(), "yyyy-MM-DD"),
+				jaTitle: req.body.jaTitle,
+				jaContent: req.body.jaContent,
+				jaAuthor: req.body.jaAuthor,
+				jaAbstract: req.body.jaAbstract,
+				jaTags: req.body.jaTags,
+				jaCategory: req.body.jaCategory
 			});
 
 			res.send("success");
@@ -70,7 +76,8 @@ router.get("/list", async (req, res) => {
 				"jaContent",
 				"jaAuthor",
 				"jaAbstract",
-				"jaTags"
+				"jaTags",
+				"jaCategory"
 			],
 			order: [["id", "DESC"]],
 			where: where
@@ -104,7 +111,8 @@ router.get("/:id", async (req, res) => {
 				"jaContent",
 				"jaAuthor",
 				"jaAbstract",
-				"jaTags"
+				"jaTags",
+				"jaCategory"
 			]
 		});
 
@@ -122,7 +130,7 @@ router.get("/:id", async (req, res) => {
 				}
 			},
 			order: [["id", "DESC"]],
-			attributes: ["id", "uid", "title"]
+			attributes: ["id", "uid", "title", "jaTitle"]
 		});
 
 		// 获取下一篇文章的信息
@@ -133,7 +141,7 @@ router.get("/:id", async (req, res) => {
 				}
 			},
 			order: [["id", "ASC"]],
-			attributes: ["id", "uid", "title"]
+			attributes: ["id", "uid", "title", "jaTitle"]
 		});
 
 		article.dataValues.prev = prevArticle;
@@ -171,6 +179,24 @@ router.put("/edit/:id", async (req, res) => {
 			}
 			if (req.body.thumbnail) {
 				updateOption.thumbnail = req.body.thumbnail;
+			}
+			if (req.body.jaTitle) {
+				updateOption.jaTitle = req.body.jaTitle;
+			}
+			if (req.body.jaContent) {
+				updateOption.jaContent = req.body.jaContent;
+			}
+			if (req.body.jaAuthor) {
+				updateOption.jaAuthor = req.body.jaAuthor;
+			}
+			if (req.body.jaAbstract) {
+				updateOption.jaAbstract = req.body.jaAbstract;
+			}
+			if (req.body.jaTags) {
+				updateOption.jaTags = req.body.jaTags;
+			}
+			if (req.body.jaCategory) {
+				updateOption.jaCategory = req.body.jaCategory;
 			}
 
 			await Article.update(updateOption, {
@@ -220,6 +246,21 @@ router.get("/category/list", async (req, res) => {
 		});
 
 		categories = categories.map((item) => item.category);
+
+		res.send(categories);
+	} catch (error) {
+		res.status(500).send;
+	}
+});
+
+router.get("/category/jaList", async (req, res) => {
+	try {
+		let categories = await Article.findAll({
+			attributes: ["jaCategory"],
+			group: ["jaCategory"]
+		});
+
+		categories = categories.map((item) => item.jaCategory);
 
 		res.send(categories);
 	} catch (error) {
