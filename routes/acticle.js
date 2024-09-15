@@ -127,7 +127,8 @@ router.get("/:id", async (req, res) => {
 			where: {
 				id: {
 					[Op.lt]: req.params.id
-				}
+				},
+				isDelete: false
 			},
 			order: [["id", "DESC"]],
 			attributes: ["id", "uid", "title", "jaTitle"]
@@ -138,7 +139,8 @@ router.get("/:id", async (req, res) => {
 			where: {
 				id: {
 					[Op.gt]: req.params.id
-				}
+				},
+				isDelete: false
 			},
 			order: [["id", "ASC"]],
 			attributes: ["id", "uid", "title", "jaTitle"]
