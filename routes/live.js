@@ -15,7 +15,10 @@ router.get("/list", async (req, res) => {
 						model: Verify,
 						attributes: ["name", "avatar"]
 					}
-				]
+				],
+				where: {
+					isDelete: false
+				}
 			},
 			{
 				raw: true
@@ -48,6 +51,25 @@ router.post("/add", async (req, res) => {
 
 		res.send(newLives);
 		newPhoto = null;
+	} catch (error) {
+		res.status(500).send(error);
+	}
+});
+
+router.delete("/delete/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		const deleteLives = await lives.update(
+			{
+				isDelete: true
+			},
+			{
+				where: {
+					id
+				}
+			}
+		);
+		res.send(deleteLives);
 	} catch (error) {
 		res.status(500).send(error);
 	}

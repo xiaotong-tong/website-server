@@ -32,6 +32,12 @@ const lives = sequelize.define("lives", {
 		allowNull: false,
 		defaultValue: "text",
 		comment: "内容类型"
+	},
+	isDelete: {
+		type: DataTypes.BOOLEAN,
+		allowNull: false,
+		defaultValue: false,
+		comment: "是否已删除"
 	}
 });
 
