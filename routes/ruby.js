@@ -7,7 +7,7 @@ const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
 const kuroshiro = new Kuroshiro.default();
 kuroshiro.init(new KuromojiAnalyzer());
 
-router.post("/tokana", async (req, res) => {
+router.post("/kana/tokana", async (req, res) => {
 	try {
 		const { message } = req.body;
 
@@ -20,6 +20,25 @@ router.post("/tokana", async (req, res) => {
 			mode: "furigana",
 			to: "hiragana"
 		});
+
+		res.send(data);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+});
+
+const pinyin = require("pinyin-pro");
+
+router.post("/pinyin/toPinyin", async (req, res) => {
+	try {
+		const { message } = req.body;
+
+		if (!message) {
+			res.status(400).send("缺少参数 message");
+			return;
+		}
+
+		const data = pinyin.html(message);
 
 		res.send(data);
 	} catch (error) {

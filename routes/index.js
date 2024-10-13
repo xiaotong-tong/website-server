@@ -4,7 +4,7 @@ const authenticate = require("./authorization.js");
 const word = require("./word.js");
 const Comments = require("./comment.js");
 const Chat = require("./chat.js");
-const Kana = require("./kana.js");
+const Ruby = require("./ruby.js");
 const Poetry = require("./poetry.js");
 const UploadImage = require("./oss/uploadImage.js");
 const Photots = require("./photos/photos.js");
@@ -22,7 +22,7 @@ const routes = (app) => {
 	app.use("/word", word);
 	app.use("/comment", Comments);
 	app.use("/chat", Chat);
-	app.use("/kana", Kana);
+	app.use("/ruby", Ruby);
 	app.use("/oss/image", UploadImage);
 	app.use("/days", Poetry);
 	app.use("/lives", Live);
