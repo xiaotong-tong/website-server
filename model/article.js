@@ -77,6 +77,10 @@ const Article = sequelize.define(
 			type: DataTypes.DATEONLY,
 			comment: "文章创建日期"
 		},
+		updateDate: {
+			type: DataTypes.DATEONLY,
+			comment: "文章更新日期"
+		},
 		thumbnail: {
 			type: DataTypes.STRING(255),
 			comment: "文章缩略图"

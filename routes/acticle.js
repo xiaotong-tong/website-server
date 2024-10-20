@@ -50,7 +50,7 @@ router.post("/add", async (req, res) => {
 
 router.get("/list", async (req, res) => {
 	try {
-		const { category } = req.query;
+		const { category, withOutContent } = req.query;
 
 		let where = {
 			isDelete: false
@@ -60,25 +60,30 @@ router.get("/list", async (req, res) => {
 			where.category = category;
 		}
 
+		const attrs = [
+			"id",
+			"uid",
+			"title",
+			"author",
+			"category",
+			"tags",
+			"createDate",
+			"updateDate",
+			"thumbnail",
+			"abstract",
+			"jaTitle",
+			"jaAuthor",
+			"jaAbstract",
+			"jaTags",
+			"jaCategory"
+		];
+
+		if (!withOutContent) {
+			attrs.push("content", "jaContent");
+		}
+
 		const articles = await Article.findAll({
-			attributes: [
-				"id",
-				"uid",
-				"title",
-				"content",
-				"author",
-				"category",
-				"tags",
-				"createDate",
-				"thumbnail",
-				"abstract",
-				"jaTitle",
-				"jaContent",
-				"jaAuthor",
-				"jaAbstract",
-				"jaTags",
-				"jaCategory"
-			],
+			attributes: attrs,
 			order: [["id", "DESC"]],
 			where: where
 		});
@@ -105,6 +110,7 @@ router.get("/:id", async (req, res) => {
 				"category",
 				"tags",
 				"createDate",
+				"updateDate",
 				"thumbnail",
 				"abstract",
 				"jaTitle",
@@ -158,7 +164,9 @@ router.get("/:id", async (req, res) => {
 router.put("/edit/:id", async (req, res) => {
 	if (req.passed) {
 		try {
-			const updateOption = {};
+			const updateOption = {
+				updateDate: formatDate(new Date(), "yyyy-MM-DD")
+			};
 
 			if (req.body.title) {
 				updateOption.title = req.body.title;
