@@ -89,6 +89,11 @@ const Article = sequelize.define(
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 			comment: "是否已删除"
+		},
+		onlyLangWith: {
+			type: DataTypes.STRING(10),
+			defaultValue: "all",
+			comment: "是否只在指定语言显示"
 		}
 	},
 	{

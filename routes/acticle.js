@@ -50,10 +50,11 @@ router.post("/add", async (req, res) => {
 
 router.get("/list", async (req, res) => {
 	try {
-		const { category, withOutContent } = req.query;
+		const { category, withOutContent, lang } = req.query;
 
 		let where = {
-			isDelete: false
+			isDelete: false,
+			[Op.or]: [{ onlyLangWith: null }, { onlyLangWith: "all" }, { onlyLangWith: lang }]
 		};
 
 		if (category) {
@@ -96,12 +97,26 @@ router.get("/list", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
 	try {
-		const article = await Article.findOne({
-			where: {
-				id: req.params.id,
-				isDelete: false
-			},
-			attributes: [
+		const { lang } = req.query;
+
+		let attrs = [];
+
+		if (lang === "ja") {
+			attrs = [
+				"id",
+				"uid",
+				["jaTitle", "title"],
+				["jaContent", "content"],
+				["jaAuthor", "author"],
+				["jaCategory", "category"],
+				["jaTags", "tags"],
+				"createDate",
+				"updateDate",
+				"thumbnail",
+				["jaAbstract", "abstract"]
+			];
+		} else {
+			attrs = [
 				"id",
 				"uid",
 				"title",
@@ -112,15 +127,22 @@ router.get("/:id", async (req, res) => {
 				"createDate",
 				"updateDate",
 				"thumbnail",
-				"abstract",
-				"jaTitle",
-				"jaContent",
-				"jaAuthor",
-				"jaAbstract",
-				"jaTags",
-				"jaCategory"
-			]
-		});
+				"abstract"
+			];
+		}
+
+		const article = await Article.findOne(
+			{
+				where: {
+					id: req.params.id,
+					isDelete: false
+				},
+				attributes: attrs
+			},
+			{
+				raw: true
+			}
+		);
 
 		// 如果 article 不存在，这代表文章不存在，返回 404
 		if (!article) {
