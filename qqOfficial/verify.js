@@ -254,6 +254,8 @@ require("./callback/group/encodeQrcode.js");
 require("./callback/group/days.js");
 require("./callback/group/kana.js");
 require("./callback/group/miao.js");
+require("./callback/group/roll.js");
+require("./callback/group/pinyin.js");
 
 // 私聊回调列表
 require("./callback/friend/login.js");
@@ -262,3 +264,5 @@ require("./callback/friend/qrcode.js");
 require("./callback/friend/encodeQrcode.js");
 require("./callback/friend/kana.js");
 require("./callback/friend/miao.js");
+require("./callback/friend/roll.js");
+require("./callback/friend/pinyin.js");

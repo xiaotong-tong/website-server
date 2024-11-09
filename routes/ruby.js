@@ -27,7 +27,7 @@ router.post("/kana/tokana", async (req, res) => {
 	}
 });
 
-const pinyin = require("pinyin-pro");
+const { html } = require("pinyin-pro");
 
 router.post("/pinyin/toPinyin", async (req, res) => {
 	try {
@@ -38,7 +38,7 @@ router.post("/pinyin/toPinyin", async (req, res) => {
 			return;
 		}
 
-		const data = pinyin.html(message);
+		const data = html(message);
 
 		res.send(data);
 	} catch (error) {
