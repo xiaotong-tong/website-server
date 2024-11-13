@@ -1,11 +1,8 @@
 const Import = require("../../verify.js");
-const dayjs = require("dayjs");
-const timezone = require("dayjs/plugin/timezone");
+const dayjs = require("../../../utils/dateUtil.js");
 
 const quotesList = require("days-quotes");
 const originDay = dayjs("2024-08-29");
-dayjs.extend(timezone);
-dayjs.tz.setDefault("Asia/Shanghai");
 
 async function doShareDaysQuotesImage(d) {
 	if (d.content.trim() === "/今日日语") {
