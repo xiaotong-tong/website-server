@@ -27,7 +27,7 @@ async function connectWS(url) {
 	ws.on("message", async function incoming(data) {
 		if (Buffer.isBuffer(data)) {
 			const str = data.toString("utf-8");
-			console.log("str", str);
+			// console.log("str", str);
 			const parsedJson = JSON.parse(str);
 
 			// 成功创建连接，心跳包
@@ -53,7 +53,6 @@ async function connectWS(url) {
 				ws.send(JSON.stringify(response));
 			} else if (parsedJson.op === 0 && parsedJson.t === "READY") {
 				// 鉴权成功
-				console.log("Bot is ready");
 				seq = parsedJson.s;
 				sessionID = parsedJson.d.session_id;
 
@@ -130,8 +129,6 @@ async function getUrl() {
 	await getAppAccessToken();
 
 	const qqUrl = domain + "/gateway";
-
-	console.log(qqUrl);
 
 	try {
 		const response = await fetch(qqUrl, {
