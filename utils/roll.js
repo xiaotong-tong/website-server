@@ -1,33 +1,77 @@
 const { random, startsWith } = require("xtt-utils");
 
-function parseRoll(text) {
-	if (!text) return "";
+const parseRoll = (dice) => {
+	if (!dice) return "";
 
-	if (!startsWith(text, /^[.。]r/)) return "";
+	if (!startsWith(dice, /^[.。]r/)) return "";
 
-	const matches = text.match(
-		/^[.。]r(?<quantity>[1-9][0-9]*)?d?(?<max>([1-9][0-9]*)|%)?(?<sub>[+-])?(?<subNumber>\d+)?\p{Zs}?(?<judgment>[1-9][0-9]*)?$/iu
+	if (dice === ".r" || dice === "。r") {
+		dice = ".rd100";
+	}
+
+	const baseDiceGrep = /([1-9][0-9]*)?d?((?:[1-9][0-9]*)|%)?((max|min)([1-9][0-9]*))?/iu;
+	const operatorGrep = /([+\-*/%]|\*\*)/iu;
+
+	const finishedGrep = new RegExp(
+		`^[.。]r(${baseDiceGrep.source})((?:${operatorGrep.source}${baseDiceGrep.source})*)$`,
+		"iu"
 	);
 
-	if (!matches) return "";
+	const sucess = finishedGrep.test(dice);
 
-	let { quantity = 1, max = 100, sub, subNumber = 0, judgment } = matches.groups;
+	if (!sucess) return "";
 
-	if (max === "%") {
-		max = 100;
-	}
+	const resObj = {
+		value: 0,
+		rolls: []
+	};
 
-	let rollsQty = 0;
-	for (let i = 0; i < quantity; i++) {
-		rollsQty += random(1, max);
-	}
-	if (sub) {
-		rollsQty += sub === "+" ? Number(subNumber) : -Number(subNumber);
-	}
-	if (judgment) {
-		rollsQty = rollsQty >= Number(judgment);
-	}
-	return rollsQty;
-}
+	const replacedDice = dice.replace(new RegExp(baseDiceGrep.source, baseDiceGrep.flags + "g"), (point) => {
+		if (point.includes("d")) {
+			let [_, quantity = 1, max = 100, boundary] = point.match(baseDiceGrep);
+
+			if (max === "%") {
+				max = 100;
+			}
+			let qty = 0;
+			let rolls = [];
+
+			for (let i = 0; i < quantity; i++) {
+				let curRoll = random(1, max);
+				let curFormatRoll = curRoll;
+				if (boundary) {
+					if (boundary.startsWith("max")) {
+						const maxRoll = parseInt(boundary.slice(3));
+						if (curRoll > maxRoll) {
+							curFormatRoll = maxRoll;
+							curRoll = maxRoll + "v";
+						}
+					} else if (boundary.startsWith("min")) {
+						const minRoll = parseInt(boundary.slice(3));
+						if (curRoll < minRoll) {
+							curFormatRoll = minRoll;
+							curRoll = minRoll + "^";
+						}
+					}
+				}
+
+				qty += curFormatRoll;
+				rolls.push(curRoll);
+			}
+			resObj.rolls.push({
+				value: qty,
+				rolls,
+				process: `${point}: [${rolls.join(", ")}] = ${qty}`,
+				point
+			});
+			return qty;
+		}
+
+		return point;
+	});
+
+	resObj.value = Function("return " + replacedDice.slice(2))();
+	return resObj;
+};
 
 module.exports = parseRoll;
