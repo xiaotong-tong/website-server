@@ -9,6 +9,7 @@ const Poetry = require("./poetry.js");
 const UploadImage = require("./oss/uploadImage.js");
 const Photots = require("./photos/photos.js");
 const Live = require("./live.js");
+const ChineseDictionaryWord = require("./chineseDictionaryWord.js");
 
 const chatLimiter = require("./limit.js");
 
@@ -26,6 +27,7 @@ const routes = (app) => {
 	app.use("/oss/image", UploadImage);
 	app.use("/days", Poetry);
 	app.use("/lives", Live);
+	app.use("/chineseDictionaryWord", ChineseDictionaryWord);
 
 	app.use("/photos", Photots);
 
