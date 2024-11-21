@@ -28,7 +28,7 @@ router.put("/edit/:id", async (req, res) => {
 				isTopic: req.body.isTopic || false
 			};
 
-			await Words.update(updateOption, {
+			await ChineseDictionaryWord.update(updateOption, {
 				where: {
 					id: req.params.id
 				}
