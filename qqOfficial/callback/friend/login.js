@@ -12,8 +12,13 @@ async function doLogin(d) {
 		});
 
 		if (item) {
-			item = await item.update({
+			await item.update({
 				password: Verify.sequelize.fn("UUID")
+			});
+			item = await Verify.findOne({
+				where: {
+					qqOpenId: qq
+				}
 			});
 		} else {
 			item = await Verify.create({

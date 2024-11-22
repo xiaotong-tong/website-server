@@ -2,7 +2,7 @@ const Import = require("../../verify.js");
 const dayjs = require("../../../utils/dateUtil.js");
 
 const quotesList = require("days-quotes");
-const originDay = dayjs("2024-08-29");
+const originDay = dayjs("2024-08-29 00:00:00");
 
 async function doShareDaysQuotesImage(d) {
 	if (d.content.trim() === "/今日日语") {
