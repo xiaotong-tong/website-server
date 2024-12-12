@@ -7,9 +7,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node index.js",
 		"dev:chat": "node ./qianfan/ernie-bot.js",
-		"qq": "node ./qqLocal/verify.js",
-		"qq:bot": "node ./qqOfficial/verify.js",
-		"qq:sandbox": "cross-env sandbox=true node ./qqOfficial/verify.js"
+		"qq": "node ./qqLocal/verify.js"
 	},
 	"repository": {
 		"type": "git",
