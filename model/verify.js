@@ -40,6 +40,11 @@ const Verify = sequelize.define(
 			type: DataTypes.STRING(255),
 			defaultValue: "https://image.xtt.moe/images/mlian2.md.webp",
 			comment: "头像 URL"
+		},
+		isMaster: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+			comment: "是否为主人账号"
 		}
 	},
 	{

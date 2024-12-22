@@ -12,9 +12,15 @@ router.get("/:uid", async (req, res) => {
 			return;
 		}
 
+		// 如果 uid 不是 UUID 格式, 则直接返回错误
+		if (!/^[0-9a-fA-F-]{36}$/.test(uid)) {
+			res.status(400).send("参数 uid 格式错误");
+			return;
+		}
+
 		const verify = await Verify.findOne(
 			{
-				attributes: ["id", "name", "password", "avatar", "qqOpenId"],
+				attributes: ["id", "name", "password", "avatar", "qqOpenId", "isMaster"],
 				where: {
 					password: req.params.uid
 				}
@@ -26,7 +32,7 @@ router.get("/:uid", async (req, res) => {
 
 		if (verify) {
 			res.send({
-				code: 0,
+				code: 200,
 				data: verify
 			});
 			return;
