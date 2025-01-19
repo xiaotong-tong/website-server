@@ -1,4 +1,4 @@
-const Verify = require("../model/verify.js");
+const Verify = require("../../model/verify.js");
 
 // 验证口令, 如果通过则设置 req.passed 为 true, 否则为 false
 

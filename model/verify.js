@@ -1,3 +1,7 @@
+/*
+ * 当前表模型和 https://github.com/xiaotong-tong/qq-bot/blob/main/model/verify.js 一致，如果有修改，必须同步修改
+ */
+
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db.js");
 
@@ -14,6 +18,10 @@ const Verify = sequelize.define(
 		name: {
 			type: DataTypes.STRING(64),
 			comment: "昵称"
+		},
+		jpName: {
+			type: DataTypes.STRING(64),
+			comment: "日文昵称"
 		},
 		password: {
 			type: DataTypes.UUID,

@@ -3,24 +3,43 @@ const router = express.Router();
 
 const Verify = require("../model/verify.js");
 
+const resMsgMap = {
+	zh: {
+		noUid: "缺少参数 uid",
+		uidFormatError: "参数 uid 格式错误",
+		uidNotFound: "验证失败, 口令错误。"
+	},
+	ja: {
+		noUid: "uidが見つかりません",
+		uidFormatError: "uidの形式が正しくありません",
+		uidNotFound: "検証に失敗しました、パスワードが間違えるかな。"
+	}
+};
 router.get("/:uid", async (req, res) => {
 	try {
+		const resMsg = resMsgMap[req.lang.startsWith("ja") ? "ja" : "zh"];
 		const { uid } = req.params;
 
 		if (!uid) {
-			res.status(400).send("缺少参数 uid");
+			res.status(400).send({
+				code: 1,
+				msg: resMsg.noUid
+			});
 			return;
 		}
 
 		// 如果 uid 不是 UUID 格式, 则直接返回错误
 		if (!/^[0-9a-fA-F-]{36}$/.test(uid)) {
-			res.status(400).send("参数 uid 格式错误");
+			res.status(400).send({
+				code: 2,
+				msg: resMsg.uidFormatError
+			});
 			return;
 		}
 
 		const verify = await Verify.findOne(
 			{
-				attributes: ["id", "name", "password", "avatar", "qqOpenId", "isMaster"],
+				attributes: ["id", "name", "jpName", "password", "avatar", "isMaster"],
 				where: {
 					password: req.params.uid
 				}
@@ -38,26 +57,25 @@ router.get("/:uid", async (req, res) => {
 			return;
 		} else {
 			res.send({
-				code: 1,
-				data: "验证失败, 口令错误。"
+				code: 3,
+				msg: resMsg.uidNotFound,
+				data: null
 			});
 		}
 	} catch (error) {
-		res.status(500).send(error);
+		res.status(500).send({
+			code: 500,
+			msg: error
+		});
 	}
 });
 
 router.put("/edit", async (req, res) => {
 	try {
-		const { id, name, password, qqOpenId, avatar } = req.body;
+		const { id, name, password, avatar } = req.body;
 
 		if (!id) {
 			res.status(400).send("缺少参数 id");
-			return;
-		}
-
-		if (!qqOpenId) {
-			res.status(400).send("缺少参数 qqOpenId");
 			return;
 		}
 
@@ -69,7 +87,6 @@ router.put("/edit", async (req, res) => {
 		let item = await Verify.findOne({
 			where: {
 				id: id,
-				qqOpenId: qqOpenId,
 				password: password
 			}
 		});

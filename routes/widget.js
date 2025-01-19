@@ -93,22 +93,22 @@ const routes = (app) => {
 
 module.exports = routes;
 
-const cron = require("node-cron");
-// 在每天三点时，删除 uploads/catch/font 文件夹下的所有文件
-cron.schedule("0 3 * * *", () => {
-	const folderPath = path.join(catchPath);
+// const cron = require("node-cron");
+// // 在每天三点时，删除 uploads/catch/font 文件夹下的所有文件
+// cron.schedule("0 3 * * *", () => {
+// 	const folderPath = path.join(catchPath);
 
-	fs.readdir(folderPath, (err, files) => {
-		if (err) {
-			console.error(err);
-		}
+// 	fs.readdir(folderPath, (err, files) => {
+// 		if (err) {
+// 			console.error(err);
+// 		}
 
-		for (const file of files) {
-			fs.unlink(path.join(folderPath, file), (err) => {
-				if (err) {
-					console.error(err);
-				}
-			});
-		}
-	});
-});
+// 		for (const file of files) {
+// 			fs.unlink(path.join(folderPath, file), (err) => {
+// 				if (err) {
+// 					console.error(err);
+// 				}
+// 			});
+// 		}
+// 	});
+// });
