@@ -19,6 +19,8 @@ async function authenticate(req, res, next) {
 
 		if (verify) {
 			req.passed = true;
+			req.userInfo = verify;
+
 			next();
 			return;
 		}

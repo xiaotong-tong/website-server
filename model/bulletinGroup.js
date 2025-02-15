@@ -36,9 +36,9 @@ const bulletinGroups = sequelize.define("bulletinGroup", {
 bulletinGroups.sync({ alter: true });
 
 // bulletinGroups.create({
-// 	url: "http://192.168.31.156:7777/images/2025/01/19/bulletin-02-full.png",
-// 	width: 1200,
-// 	height: 672
+// 	url: "https://image.xtt.moe/local/images/2025/02/12/bulletin-04-full.png",
+// 	width: 1920,
+// 	height: 1080
 // });
 
 module.exports = bulletinGroups;

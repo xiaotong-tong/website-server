@@ -72,11 +72,21 @@ router.get("/:uid", async (req, res) => {
 
 router.put("/edit", async (req, res) => {
 	try {
-		const { id, name, password, avatar } = req.body;
+		const userInfo = req.userInfo;
+
+		const { id, name, password, avatar, jpName } = req.body;
 
 		if (!id) {
 			res.status(400).send("缺少参数 id");
 			return;
+		}
+
+		if (userInfo.id !== id) {
+			res.status(401).send({
+				code: 401,
+				msg: "Unauthorized"
+			});
+			return false;
 		}
 
 		if (!password) {
@@ -98,6 +108,7 @@ router.put("/edit", async (req, res) => {
 
 		item = await item.update({
 			name: name,
+			jpName: jpName,
 			avatar: avatar
 		});
 

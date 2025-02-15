@@ -13,7 +13,7 @@ router.get("/list", async (req, res) => {
 				include: [
 					{
 						model: Verify,
-						attributes: ["name", "avatar"]
+						attributes: ["name", "avatar", "jpName"]
 					}
 				],
 				where: {
@@ -32,27 +32,42 @@ router.get("/list", async (req, res) => {
 
 router.post("/add", async (req, res) => {
 	try {
-		const { content, userId, contentType } = req.body;
+		const userInfo = req.userInfo;
 
-		if (!content) {
-			res.status(400).send("content is required");
+		if (!userInfo) {
+			res.status(401).send({
+				code: 401,
+				msg: "Unauthorized"
+			});
 			return false;
 		}
-		if (!userId) {
-			res.status(400).send("userId is required");
+
+		const { content, contentType } = req.body;
+
+		if (!content) {
+			res.status(400).send({
+				code: 400,
+				msg: "content is required"
+			});
 			return false;
 		}
 
 		const newLives = await lives.create({
 			content,
-			userId,
+			userId: userInfo.id,
 			contentType
 		});
 
-		res.send(newLives);
+		res.send({
+			code: 200,
+			data: newLives
+		});
 		newPhoto = null;
 	} catch (error) {
-		res.status(500).send(error);
+		res.status(500).send({
+			code: 500,
+			msg: error
+		});
 	}
 });
 
