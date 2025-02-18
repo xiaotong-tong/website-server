@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db.js");
+const Verify = require("./verify.js");
 
 // 为表定义模型
 const Article = sequelize.define(
@@ -46,6 +47,11 @@ const Article = sequelize.define(
 		author: {
 			type: DataTypes.STRING(255),
 			comment: "文章作者"
+		},
+		userId: {
+			type: DataTypes.BIGINT.UNSIGNED,
+			allowNull: false,
+			comment: "作者ID"
 		},
 		jaAuthor: {
 			type: DataTypes.STRING(255),
@@ -105,6 +111,11 @@ const Article = sequelize.define(
 		]
 	}
 );
+
+Article.belongsTo(Verify, {
+	foreignKey: "userId",
+	targetKey: "id"
+});
 
 // 同步模型到数据库中
 Article.sync({ alter: true });

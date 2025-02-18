@@ -7,19 +7,21 @@ const { formatDate } = require("xtt-utils");
 // 文章好像不需要过滤，目前文章方面由我自己控制，写入等也需要有写入权限。
 // const xss = require("xss");
 
+const Verify = require("../model/verify.js");
 const Article = require("../model/article.js");
 
 router.post("/add", async (req, res) => {
 	if (req.passed) {
 		try {
 			let { content } = req.body;
+			const { id: userId } = req.userInfo;
 
 			// content = xss(content);
 
 			await Article.create({
 				title: req.body.title,
 				content: content,
-				author: req.body.author,
+				// author: req.body.author,
 				category: req.body.category,
 				tags: req.body.tags,
 				abstract: req.body.abstract,
@@ -27,10 +29,11 @@ router.post("/add", async (req, res) => {
 				createDate: formatDate(new Date(), "yyyy-MM-DD"),
 				jaTitle: req.body.jaTitle,
 				jaContent: req.body.jaContent,
-				jaAuthor: req.body.jaAuthor,
+				// jaAuthor: req.body.jaAuthor,
 				jaAbstract: req.body.jaAbstract,
 				jaTags: req.body.jaTags,
-				jaCategory: req.body.jaCategory
+				jaCategory: req.body.jaCategory,
+				userId: userId
 			});
 
 			res.send("success");
@@ -65,7 +68,7 @@ router.get("/list", async (req, res) => {
 			"id",
 			"uid",
 			"title",
-			"author",
+			// "author",
 			"category",
 			"tags",
 			"createDate",
@@ -73,7 +76,7 @@ router.get("/list", async (req, res) => {
 			"thumbnail",
 			"abstract",
 			"jaTitle",
-			"jaAuthor",
+			// "jaAuthor",
 			"jaAbstract",
 			"jaTags",
 			"jaCategory"
@@ -85,6 +88,12 @@ router.get("/list", async (req, res) => {
 
 		const articles = await Article.findAll({
 			attributes: attrs,
+			include: [
+				{
+					model: Verify,
+					attributes: ["name", "avatar", "jpName", "id"]
+				}
+			],
 			order: [["id", "DESC"]],
 			where: where
 		});
@@ -105,9 +114,10 @@ router.get("/:id", async (req, res) => {
 			attrs = [
 				"id",
 				"uid",
+				"userId",
 				["jaTitle", "title"],
 				["jaContent", "content"],
-				["jaAuthor", "author"],
+				// ["jaAuthor", "author"],
 				["jaCategory", "category"],
 				["jaTags", "tags"],
 				"createDate",
@@ -119,9 +129,10 @@ router.get("/:id", async (req, res) => {
 			attrs = [
 				"id",
 				"uid",
+				"userId",
 				"title",
 				"content",
-				"author",
+				// "author",
 				"category",
 				"tags",
 				"createDate",
@@ -137,7 +148,13 @@ router.get("/:id", async (req, res) => {
 					id: req.params.id,
 					isDelete: false
 				},
-				attributes: attrs
+				attributes: attrs,
+				include: [
+					{
+						model: Verify,
+						attributes: ["name", "avatar", "jpName", "id"]
+					}
+				]
 			},
 			{
 				raw: true
@@ -186,6 +203,16 @@ router.get("/:id", async (req, res) => {
 router.put("/edit/:id", async (req, res) => {
 	if (req.passed) {
 		try {
+			const { id: headerUserId } = req.userInfo;
+
+			if (req.body.userId !== headerUserId) {
+				res.status(401).send({
+					code: 401,
+					msg: "Unauthorized"
+				});
+				return;
+			}
+
 			const updateOption = {
 				updateDate: formatDate(new Date(), "yyyy-MM-DD")
 			};
@@ -197,9 +224,9 @@ router.put("/edit/:id", async (req, res) => {
 				// updateOption.content = xss(req.body.content);
 				updateOption.content = req.body.content;
 			}
-			if (req.body.author) {
-				updateOption.author = req.body.author;
-			}
+			// if (req.body.author) {
+			// 	updateOption.author = req.body.author;
+			// }
 			if (req.body.category) {
 				updateOption.category = req.body.category;
 			}
@@ -218,9 +245,9 @@ router.put("/edit/:id", async (req, res) => {
 			if (req.body.jaContent) {
 				updateOption.jaContent = req.body.jaContent;
 			}
-			if (req.body.jaAuthor) {
-				updateOption.jaAuthor = req.body.jaAuthor;
-			}
+			// if (req.body.jaAuthor) {
+			// 	updateOption.jaAuthor = req.body.jaAuthor;
+			// }
 			if (req.body.jaAbstract) {
 				updateOption.jaAbstract = req.body.jaAbstract;
 			}
@@ -249,6 +276,8 @@ router.put("/edit/:id", async (req, res) => {
 router.delete("/delete/:id", async (req, res) => {
 	if (req.passed) {
 		try {
+			const { id: headerUserId } = req.userInfo;
+
 			// 删除文章
 			await Article.update(
 				{
@@ -256,7 +285,8 @@ router.delete("/delete/:id", async (req, res) => {
 				},
 				{
 					where: {
-						id: req.params.id
+						id: req.params.id,
+						userId: headerUserId
 					}
 				}
 			);
