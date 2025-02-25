@@ -118,6 +118,6 @@ Article.belongsTo(Verify, {
 });
 
 // 同步模型到数据库中
-Article.sync({ alter: true });
+// Article.sync({ alter: true });
 
 module.exports = Article;

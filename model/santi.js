@@ -28,6 +28,6 @@ const santi = sequelize.define("santi", {
 });
 
 // 同步模型到数据库中
-santi.sync({ alter: true });
+// santi.sync({ alter: true });
 
 module.exports = santi;

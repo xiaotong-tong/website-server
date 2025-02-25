@@ -23,6 +23,6 @@ const photos = sequelize.define("photos", {
 });
 
 // 同步模型到数据库中
-photos.sync({ alter: true });
+// photos.sync({ alter: true });
 
 module.exports = photos;

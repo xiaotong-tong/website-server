@@ -71,6 +71,6 @@ const Verify = sequelize.define(
 );
 
 // 同步模型到数据库中
-Verify.sync({ alter: true });
+// Verify.sync({ alter: true });
 
 module.exports = Verify;

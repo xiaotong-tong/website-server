@@ -2,6 +2,7 @@
 const authenticate = require("./middleware/authorization.js");
 const chatLimiter = require("./middleware/limit.js");
 const lang = require("./middleware/lang.js");
+const accessInfo = require("./middleware/accessInfo.js");
 
 // 导入路由处理
 const acticle = require("./acticle.js");
@@ -24,6 +25,7 @@ const routes = (app) => {
 	app.use("/chat/bot", chatLimiter);
 	app.use(authenticate);
 	app.use(lang);
+	app.use(accessInfo);
 
 	// 使用路由
 	app.use("/acticle", acticle);

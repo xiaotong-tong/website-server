@@ -57,6 +57,6 @@ const bulletins = sequelize.define("bulletin", {
 });
 
 // 同步模型到数据库中
-bulletins.sync({ alter: true });
+// bulletins.sync({ alter: true });
 
 module.exports = bulletins;

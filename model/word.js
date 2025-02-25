@@ -37,6 +37,6 @@ const Words = sequelize.define("words", {
 });
 
 // 同步模型到数据库中
-Words.sync({ alter: true });
+// Words.sync({ alter: true });
 
 module.exports = Words;

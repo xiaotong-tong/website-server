@@ -34,6 +34,6 @@ const ChineseDictionaryWord = sequelize.define("chineseDictionaryWords", {
 });
 
 // 同步模型到数据库中
-ChineseDictionaryWord.sync({ alter: true });
+// ChineseDictionaryWord.sync({ alter: true });
 
 module.exports = ChineseDictionaryWord;

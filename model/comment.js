@@ -58,6 +58,6 @@ const Comments = sequelize.define("comments", {
 });
 
 // 同步模型到数据库中
-Comments.sync({ alter: true });
+// Comments.sync({ alter: true });
 
 module.exports = Comments;

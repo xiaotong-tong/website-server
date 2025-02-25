@@ -17,6 +17,6 @@ const commentPhotos = sequelize.define("commentPhotos", {
 });
 
 // 同步模型到数据库中
-commentPhotos.sync({ alter: true });
+// commentPhotos.sync({ alter: true });
 
 module.exports = commentPhotos;

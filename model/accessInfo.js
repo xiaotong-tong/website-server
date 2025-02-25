@@ -1,20 +1,28 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db.js");
 
-const Verify = require("./verify.js");
-
 // 为表定义模型
-const lives = sequelize.define("lives", {
+const accessInfo = sequelize.define("accessInfo", {
 	id: {
 		type: DataTypes.BIGINT.UNSIGNED,
 		allowNull: false,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	content: {
-		type: DataTypes.TEXT,
+	url: {
+		type: DataTypes.STRING(64),
 		allowNull: false,
-		comment: "动态内容"
+		comment: "访问的URL"
+	},
+	method: {
+		type: DataTypes.STRING(10),
+		allowNull: false,
+		comment: "请求方法"
+	},
+	userAgent: {
+		type: DataTypes.STRING(255),
+		allowNull: false,
+		comment: "用户代理信息"
 	},
 	userId: {
 		type: DataTypes.BIGINT.UNSIGNED,
@@ -25,13 +33,7 @@ const lives = sequelize.define("lives", {
 		type: DataTypes.DATE,
 		allowNull: false,
 		defaultValue: DataTypes.NOW,
-		comment: "创建时间"
-	},
-	contentType: {
-		type: DataTypes.STRING(10),
-		allowNull: false,
-		defaultValue: "text",
-		comment: "内容类型"
+		comment: "访问时间"
 	},
 	isDelete: {
 		type: DataTypes.BOOLEAN,
@@ -41,12 +43,7 @@ const lives = sequelize.define("lives", {
 	}
 });
 
-lives.belongsTo(Verify, {
-	foreignKey: "userId",
-	targetKey: "id"
-});
-
 // 同步模型到数据库中
-// lives.sync({ alter: true });
+// accessInfo.sync({ alter: true });
 
-module.exports = lives;
+module.exports = accessInfo;

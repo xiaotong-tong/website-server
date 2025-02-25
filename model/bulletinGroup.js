@@ -33,7 +33,7 @@ const bulletinGroups = sequelize.define("bulletinGroup", {
 });
 
 // 同步模型到数据库中
-bulletinGroups.sync({ alter: true });
+// bulletinGroups.sync({ alter: true });
 
 // bulletinGroups.create({
 // 	url: "https://image.xtt.moe/local/images/2025/02/12/bulletin-04-full.png",
