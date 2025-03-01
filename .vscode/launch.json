@@ -9,11 +9,7 @@
 			"request": "launch",
 			"name": "启动程序",
 			"skipFiles": ["<node_internals>/**"],
-			// "program": "${workspaceFolder}\\index.js"
-			"program": "${workspaceFolder}\\qqOfficial\\verify.js",
-			"env": {
-				"sandbox": "true"
-			}
+			"program": "${workspaceFolder}\\index.js"
 		}
 	]
 }

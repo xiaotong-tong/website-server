@@ -26,7 +26,6 @@ const accessInfo = sequelize.define("accessInfo", {
 	},
 	userId: {
 		type: DataTypes.BIGINT.UNSIGNED,
-		allowNull: false,
 		comment: "用户ID"
 	},
 	createTime: {

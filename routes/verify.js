@@ -7,12 +7,16 @@ const resMsgMap = {
 	zh: {
 		noUid: "缺少参数 uid",
 		uidFormatError: "参数 uid 格式错误",
-		uidNotFound: "验证失败, 口令错误。"
+		uidNotFound: "验证失败, 口令错误。",
+		refreshNoKey: "请求头缺少 Authorization 字段",
+		refreshTokenError: "当前口令已失效，请重新登录"
 	},
 	ja: {
 		noUid: "uidが見つかりません",
 		uidFormatError: "uidの形式が正しくありません",
-		uidNotFound: "検証に失敗しました、パスワードが間違えるかな。"
+		uidNotFound: "検証に失敗しました、パスワードが間違えるかな。",
+		refreshNoKey: "リクエストヘッダーにAuthorization フィールドがありません",
+		refreshTokenError: "現在のパスワードは無効です。再度ログインしてください"
 	}
 };
 router.get("/:uid", async (req, res) => {
@@ -119,6 +123,61 @@ router.put("/edit", async (req, res) => {
 		}
 	} catch (error) {
 		res.status(500).send(error);
+	}
+});
+
+router.get("/user/refresh", async (req, res) => {
+	try {
+		const resMsg = resMsgMap[req.lang.startsWith("ja") ? "ja" : "zh"];
+		const uid = req.headers.authorization;
+
+		if (!uid) {
+			res.status(400).send({
+				code: 1,
+				msg: resMsg.refreshNoKey
+			});
+			return;
+		}
+
+		// 如果 uid 不是 UUID 格式, 则直接返回错误
+		if (!/^[0-9a-fA-F-]{36}$/.test(uid)) {
+			res.status(400).send({
+				code: 2,
+				msg: resMsg.uidFormatError
+			});
+			return;
+		}
+
+		const verify = await Verify.findOne(
+			{
+				attributes: ["id"],
+				where: {
+					password: uid
+				}
+			},
+			{
+				raw: true
+			}
+		);
+
+		if (verify) {
+			res.send({
+				code: 200,
+				data: verify
+			});
+			return;
+		} else {
+			res.send({
+				code: 3,
+				msg: resMsg.refreshTokenError,
+				data: null
+			});
+		}
+	} catch (error) {
+		res.status(500).send({
+			code: 500,
+			msg: error
+		});
 	}
 });
 

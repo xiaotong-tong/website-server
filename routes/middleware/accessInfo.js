@@ -5,7 +5,7 @@ async function access(req, res, next) {
 		url: req.originalUrl,
 		method: req.method,
 		userAgent: req.get("User-Agent"),
-		userId: req.userInfo.id
+		userId: req.userInfo?.id
 	});
 
 	next();
