@@ -3,7 +3,7 @@ const router = express.Router();
 
 const poetry300List = require("chinese-poetry/全唐诗/唐诗三百首.json");
 
-const quotesList = require("days-quotes");
+const quotesList = require("@xtt-nami/days-quotes");
 
 router.get("/poetry", async (req, res) => {
 	try {
