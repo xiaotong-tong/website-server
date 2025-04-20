@@ -46,7 +46,7 @@ const Verify = sequelize.define(
 		},
 		avatar: {
 			type: DataTypes.STRING(255),
-			defaultValue: "https://image.xtt.moe/images/mlian2.md.webp",
+			defaultValue: "https://image.xtt.cool/images/mlian2.md.webp",
 			comment: "头像 URL"
 		},
 		isMaster: {
