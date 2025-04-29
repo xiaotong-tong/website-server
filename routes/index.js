@@ -19,6 +19,7 @@ const ChineseDictionaryWord = require("./chineseDictionaryWord.js");
 const Bulletins = require("./bulletin/bulletin.js");
 const BulletinsGroup = require("./bulletin/bulletinGroup.js");
 const Santi = require("./santi.js");
+const Visit = require("./global/visit.js");
 
 const routes = (app) => {
 	// 使用中间件
@@ -41,6 +42,7 @@ const routes = (app) => {
 	app.use("/bulletin", Bulletins);
 	app.use("/bulletinGroup", BulletinsGroup);
 	app.use("/santi", Santi);
+	app.use("/visit", Visit);
 
 	app.use("/photos", Photots);
 
